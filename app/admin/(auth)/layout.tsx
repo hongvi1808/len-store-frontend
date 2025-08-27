@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { LayoutAdmin } from "@/components/layouts/layout-admin.comp";
-import { ChartBarIcon, ListBulletIcon, TableCellsIcon, } from "@heroicons/react/16/solid";
+import { LayoutAdmin } from "@/components/layouts/adminLayout/layout-admin.comp";
+import { CalendarDaysIcon, ChartBarIcon, ListBulletIcon, TableCellsIcon, } from "@heroicons/react/16/solid";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -9,17 +9,22 @@ export const metadata: Metadata = {
 const menu = [{
   text: 'Dashboard',
   href: '/admin/dashboard',
-  icon: <ChartBarIcon width={20} height={20} />,
+  icon: <ChartBarIcon  />,
 },
 {
   text: 'Category',
   href: '/admin/category',
-  icon: <ListBulletIcon width={20} height={20} />,
+  icon: <ListBulletIcon  />,
 },
 {
   text: 'Product',
   href: '/admin/product',
-  icon: <TableCellsIcon width={20} height={20} />,
+  icon: <TableCellsIcon  />,
+},
+{
+  text: 'Order',
+  href: '/admin/order',
+  icon: <CalendarDaysIcon  />,
 },
 ]
 export default function AdminRootLayout({

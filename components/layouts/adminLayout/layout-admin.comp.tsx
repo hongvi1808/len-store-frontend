@@ -4,7 +4,6 @@ import { Box, Icon, Toolbar, useMediaQuery, useTheme, } from "@mui/material"
 import Header from "./header.comp"
 import { useState } from "react";
 import { Sitebar } from "./sitebar.comp";
-import { LightBulbIcon } from "@heroicons/react/24/outline";
 import { BuildingStorefrontIcon } from "@heroicons/react/24/solid";
 
 export function LayoutAdmin({
@@ -41,7 +40,7 @@ export function LayoutAdmin({
                     flexGrow: 1,
                     p: 3,
                     transition: "margin 0.3s",
-                    marginLeft: isOverSmViewport ? open ? '240px' : '120px' : 0,
+                    marginLeft: isOverSmViewport ? open ? '240px' : '100px' : 0,
                 }}
             >
                 {children}

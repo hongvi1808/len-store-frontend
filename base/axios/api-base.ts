@@ -5,7 +5,7 @@ import { getSessionLocal } from "../utils/func"
 
 type Method = 'get' | 'post' | 'put' | 'delete'
 
-interface RequestOptions extends AxiosRequestConfig {
+interface RequestOptions {
     hasAuth?: boolean
     isLoading?: boolean,
 }
@@ -18,7 +18,7 @@ async function request<T = any>(
     method: Method,
     url: string,
     data: any = null,
-    options: RequestOptions = {}
+    options: RequestOptions & AxiosRequestConfig = {}
 ): Promise<T | ListData<T>> {
     const { hasAuth, params, headers } = options
 
@@ -31,6 +31,8 @@ async function request<T = any>(
             ...getAuthHeader(),
             ...headers,
         },
+        ...options
+
     }
 
     const res: DataResponse<T> = (await axiosClient.request<DataResponse<T>>(config))?.data
@@ -39,10 +41,10 @@ async function request<T = any>(
 
 // Các method tiện dụng
 const apiBase = {
-    get: <T = any>(url: string, options?: RequestOptions) => request<T>('get', url, null, options),
-    post: <T = any>(url: string, data: any, options?: RequestOptions) => request<T>('post', url, data, options),
-    put: <T = any>(url: string, data: any, options?: RequestOptions) => request<T>('put', url, data, options),
-    delete: <T = any>(url: string, options?: RequestOptions) => request<T>('delete', url, {}, options),
+    get: <T = any>(url: string, options?: RequestOptions & AxiosRequestConfig) => request<T>('get', url, null, options),
+    post: <T = any>(url: string, data: any, options?: RequestOptions & AxiosRequestConfig) => request<T>('post', url, data, options),
+    put: <T = any>(url: string, data: any, options?: RequestOptions & AxiosRequestConfig) => request<T>('put', url, data, options),
+    delete: <T = any>(url: string, options?: RequestOptions & AxiosRequestConfig) => request<T>('delete', url, {}, options),
 }
 
 export default apiBase

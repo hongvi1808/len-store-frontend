@@ -26,21 +26,31 @@ export function AutocompleteBase<T, Multiple extends boolean | undefined = false
     if (props.default) setSelected(props.default);
   }, [props.default]);
   const handleOnBlur = (e: any) => {
-    if (props.values)  props.values(selected)
+    if (props.values) props.values(selected)
   }
   return (<>
     <Autocomplete
       fullWidth
       {...props}
-      sx={!props.multiple ? {
-        "& .MuiOutlinedInput-root": {
-          paddingY: 0,
+      sx={{
+        "& .MuiButtonBase-root": {
+          height: '1.75rem  !important',
+          padding: '2px',
+          mr: '2px'
         },
-      }: {}}
-      value={selected || props.defaultValue || (props.multiple ? []: null)}
+        "& .MuiInputBase-root": {
+          height: props?.multiple  ?'3rem  !important' : '2.25rem  !important',
+        },
+       
+      }}
+      value={selected || props.defaultValue || (props.multiple ? [] : null)}
       onChange={(e, newValue) => setSelected(newValue)}
       onBlur={handleOnBlur}
-      renderInput={(params) => <TextFiledControlBase inputProps={{ ...params }} name={props.name} getErrorMessage={(v) => props.required ?validRequire(v): ''} label={props.label} />}
+      renderInput={(params) => <TextFiledControlBase
+        inputProps={{ ...params,}}
+        name={props.name}
+        getErrorMessage={(v) => props.required ? validRequire(v) : ''}
+        label={props.label} />}
     />
 
   </>)

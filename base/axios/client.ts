@@ -28,7 +28,7 @@ axiosClient.interceptors.response.use(
       console.error("Refresh token failed", err);
     }
     }
-    if (error.response?.status >= 400) {
+    else if (error.response?.status >= 400) {
       showAlertError(error.response.data?.message || error?.message)
       console.warn( error.response)
     }

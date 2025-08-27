@@ -21,27 +21,25 @@ export function Sitebar(props: SitebarProps) {
             <Toolbar />
             <List>
                 {props.menus?.map((item, index) => (
-                    <ListItem key={index} disablePadding sx={{ display: "block" }}>
+                    <ListItem key={index} disablePadding sx={{ display: "block",}}>
                         <ListItemButton
                         selected={item.href === pathname}
                             sx={{
-                                minWidth: props.open? 240 : 120,
+                                minWidth: props.open? 240 : 100,
                                 display: "flex",
                                 justifyContent:  props.open ? 'flex-start' : "center",
                                 alignItems: "center",
-                                margin: 1,
-                                borderRadius: 2
                             }}
                             onClick={() => router.push(item.href)}
                         >
-                            <Stack spacing={props.open ? 1 : 0} direction={props.open ? 'row' : 'column'}
+                            <Stack spacing={props.open ? 1 : 0} alignItems={'center'} direction={props.open ? 'row' : 'column'} 
                                 sx={{
                                     justifyContent: props.open ? 'flex-start' : "center",
-                                    alignItems: props.open ? 'flex-start' : "center",
+                                    padding: 1
                                 }}>
 
                                 <Icon sx={{ justifyContent: 'center', alignContent: 'center', }} >
-                                    {item.icon || <StarIcon width={20} height={20} />}
+                                    {item.icon || <StarIcon  />}
                                 </Icon>
                                 <ListItemText primary={item.text} sx={{
                                     textAlign: props.open ? "left" : "center",

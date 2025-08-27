@@ -1,12 +1,12 @@
 import {  Paper, Stack, Typography } from "@mui/material"
-import { ProductListForm } from "./product-list.comp";
+import { OrderListForm } from "./order-list.comp";
 
-export default function AdminProductPage() {
+export default function AdminOrderPage() {
   return (
       <Stack direction={'column'} spacing={2} sx={{marginLeft: 2}}>
-        <Typography component={'h1'} variant="h6">{'Product Management'}</Typography>
+        <Typography component={'h1'} variant="h6">{'Order Management'}</Typography>
         <Paper elevation={2} sx={{ p: 2, borderRadius: 2 }}>
-        <ProductListForm />
+        <OrderListForm />
         </Paper>
       </Stack>
   );

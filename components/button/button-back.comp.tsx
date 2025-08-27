@@ -12,7 +12,7 @@ export function ButtonBack(props: ButtonProps) {
             <ButtonBase
                 onClick={() => router.back()}
                 children={<Icon sx={{ justifyContent: 'center', alignContent: 'center' }} >
-                    <ArrowLeftIcon width={20} height={20} color="primary" />
+                    <ArrowLeftIcon  color="primary" />
                 </Icon>}
                 color='inherit'
                 {...props}

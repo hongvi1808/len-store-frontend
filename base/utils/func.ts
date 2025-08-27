@@ -34,3 +34,15 @@ export const regexVaid = (name: string) => {
         default: return {}
     }
 }
+
+// Utility: format currency (default VND)
+export const formatCurrency = (
+  value: number,
+  locale: string = "vi-VN",
+  currency: string = "VND"
+) =>
+  new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency,
+    maximumFractionDigits: currency === "VND" ? 0 : 2,
+  }).format(value);

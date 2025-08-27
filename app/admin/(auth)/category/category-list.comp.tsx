@@ -15,6 +15,7 @@ import { GridColDef } from "@mui/x-data-grid";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { ProductListByCategoryTable } from "./product-by-category";
+import { TAGS_CATEGORY } from "@/base/utils/constants";
 
 export function CategoryListForm() {
     const queryClient = useQueryClient();
@@ -25,7 +26,8 @@ export function CategoryListForm() {
     // QUERY
     const { isLoading: categoryLoading, data: categories } = useQuery({
         queryKey: ['admin-category', paginationModel],
-        queryFn: async () => categoryApis.getList(paginationModel),
+        queryFn: () => categoryApis.getList(paginationModel),
+        enabled: !!paginationModel
     });
     // MUTATE
     const { mutate: removeMutate, isPending: removePending } = useMutation({
@@ -49,7 +51,7 @@ export function CategoryListForm() {
         onSuccess: (data) => {
             showAlertSuccess('Added a category!')
             onToggleDiaglog(null)
-            queryClient.invalidateQueries({ queryKey: ['admin-category', paginationModel] });
+            queryClient.refetchQueries({ queryKey: ['admin-category', paginationModel] });
         },
     });
     const { mutate: updateMutate, isPending: updatePending } = useMutation({
@@ -59,10 +61,10 @@ export function CategoryListForm() {
             showAlertError(error.message)
 
         },
-        onSuccess: (data) => {
+        onSuccess: async (data) => {
             showAlertSuccess('Updated a category!')
             onToggleDiaglog(null)
-            queryClient.invalidateQueries({ queryKey: ['admin-category', paginationModel] });
+            await queryClient.refetchQueries({ queryKey: ['admin-category', paginationModel] }, {cancelRefetch: true});
         },
     });
 
@@ -89,16 +91,16 @@ export function CategoryListForm() {
         { field: 'tag', headerName: 'Tag', flex: 1 },
         {
             field: "action",
-            headerName: "", flex: 2,
+            headerName: "", flex: 1,
             renderCell: (params) => (
                 <Box>
-                    <ButtonIcon iconComp={<PencilSquareIcon height={20} width={20} />}
+                    <ButtonIcon iconComp={<PencilSquareIcon  />}
                         buttonProps={{ color: 'primary' }}
                         onClick={() => onToggleDiaglog(params.row)} />
-                    <ButtonIcon iconComp={<QueueListIcon height={20} width={20} />}
+                    <ButtonIcon iconComp={<QueueListIcon  />}
                         buttonProps={{ color: 'secondary' }}
                         onClick={() => onToggleProductListDiaglog(params.row)} />
-                    <ButtonIcon iconComp={<TrashIcon height={20} width={20} />}
+                    <ButtonIcon iconComp={<TrashIcon  />}
                         buttonProps={{ color: 'error', loading: removePending }}
                         onClick={() => removeMutate(params.row.id)} />
 
@@ -110,7 +112,7 @@ export function CategoryListForm() {
         <Box>
             <Stack direction={'row'} spacing={2} justifyContent={'flex-end'} sx={{ marginLeft: 2, marginBottom: 2 }}>
                 <ButtonIconText
-                    iconComp={<PlusIcon height={20} width={20} />}
+                    iconComp={<PlusIcon />}
                     onClick={(() => onToggleDiaglog(null))}
                     title={'Add'}
                     buttonProps={{ size: 'medium' }}
@@ -120,6 +122,7 @@ export function CategoryListForm() {
                 paginationMode="server"
                 rowCount={categories?.total || 0}
                 loading={categoryLoading}
+                pagination
                 onPaginationModelChange={(model) => setPaginationModel({ page: model.page, limit: model.pageSize })}
                 paginationModel={{ page: paginationModel.page, pageSize: paginationModel.limit }}
                 rows={categories?.items || []}
@@ -137,27 +140,28 @@ export function CategoryListForm() {
                                 <TextFiledControlBase
                                     name='name'
                                     label="Name*"
-                                    inputProps={{ required: true }}
+                                    inputProps={{ required: true, defaultValue: item?.name }}
                                     getErrorMessage={validRequire}
                                 />
                                 <AutocompleteBase<string, false>
-                                options={['good', 'hot', 'new']}
-                                label="Role"
-                                name="role"
-                                defaultValue={'good'}
+                                options={TAGS_CATEGORY}
+                                label="Tag"
+                                name="tag"
+                                default={item?.tag}
+                                defaultValue={'other'}
                                 renderInput={(param) => <></>}
                             />
 
                     </Box>
                 </DialogContent>
                 <DialogActions sx={{ margin: 2 }} >
-                    <ButtonIconText iconComp={<XMarkIcon height={20} width={20} />}
+                    <ButtonIconText iconComp={<XMarkIcon  />}
                         title="Cancel"
                         buttonProps={{ color: 'error', variant: 'outlined', size: 'medium' }}
                         onClick={() => onToggleDiaglog(null)}
                     />
                     <ButtonIconText
-                        iconComp={<ArrowRightStartOnRectangleIcon height={20} width={20} />}
+                        iconComp={<ArrowRightStartOnRectangleIcon  />}
                         title="Submit"
                         buttonProps={{ type: "submit", size: 'medium', loading: item ? updatePending : createPending, form: 'add-category-form' }}
                     />

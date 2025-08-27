@@ -11,11 +11,11 @@ import Stack from '@mui/material/Stack';
 import { Avatar, Icon, Link, Menu, MenuItem } from '@mui/material';
 import { Bars3Icon, ChevronDoubleLeftIcon, PowerIcon, UserIcon } from '@heroicons/react/16/solid';
 import { UserCircleIcon } from '@heroicons/react/24/solid';
-import { ButtonIcon } from '../button/button-icon.comp';
+import { ButtonIcon } from '../../button/button-icon.comp';
 import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import { showAlertError } from '@/base/ui/toaster';
-import { ButtonIconText } from '../button/buton-iconText.comp';
+import { ButtonIconText } from '../../button/buton-iconText.comp';
 import { getSessionLocal } from '@/base/utils/func';
 import { authApis } from '@/base/apis/auth.api';
 import { SESSION_LOCAL_STORAGE_KEY } from '@/base/utils/constants';
@@ -64,7 +64,7 @@ const { mutate, isPending } = useMutation({
         },
         onSuccess: (data) => {
           localStorage.removeItem(SESSION_LOCAL_STORAGE_KEY)
-          router.push('/login')
+          router.push('/admin/login')
         },
     });
 
@@ -96,10 +96,10 @@ const { mutate, isPending } = useMutation({
               onClick={handleMenuOpen}
             >
               {!isExpanded ? <Icon sx={{ justifyContent: 'center', alignContent: 'center' }} >
-                    <Bars3Icon width={20} height={20} color="primary" />
+                    <Bars3Icon  color="primary" />
                 </Icon>
                  : <Icon sx={{ justifyContent: 'center', alignContent: 'center' }} >
-                    <ChevronDoubleLeftIcon width={20} height={20} color="primary" />
+                    <ChevronDoubleLeftIcon  color="primary" />
                 </Icon>}
             </IconButton>
           </div>
@@ -171,10 +171,10 @@ const { mutate, isPending } = useMutation({
               >
                 {getSessionLocal()?.userId &&
                 <MenuItem onClick={() => router.push('/admin/profile')}>
-                  <ButtonIconText buttonProps={{ variant: 'text', color: 'inherit'}} iconComp={<UserIcon height={20} width={20}/>} title='Profile'/>
+                  <ButtonIconText buttonProps={{ variant: 'text', color: 'inherit'}} iconComp={<UserIcon />} title='Profile'/>
                 </MenuItem>}
                 <MenuItem onClick={() => mutate()}>
-                  <ButtonIconText buttonProps={{loading: isPending, variant: 'text', color: 'inherit'}} iconComp={<PowerIcon height={20} width={20}/>} title='Logout'/>
+                  <ButtonIconText buttonProps={{loading: isPending, variant: 'text', color: 'inherit'}} iconComp={<PowerIcon />} title='Logout'/>
                 </MenuItem>
               </Menu>
             </Stack>

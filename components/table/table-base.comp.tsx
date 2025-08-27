@@ -1,15 +1,12 @@
 'use client'
 import * as React from 'react';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { Box, Button, Paper } from '@mui/material';
-import { ButtonIcon } from '../button/button-icon.comp';
-import { PencilSquareIcon, TrashIcon } from '@heroicons/react/16/solid';
+import { DataGrid } from '@mui/x-data-grid';
 import { DataGridProps } from '@mui/x-data-grid';
 
 
 export default function TableBase(props: DataGridProps) {
   return (
-   <Paper sx={{ height: 400, width: '100%', marginLeft:1 }}>
+  //  <Paper sx={{ minHeight: 500, width: '100%', marginLeft:1 }}>
       <DataGrid
         // rows={rows}
         // columns={columns}
@@ -27,6 +24,6 @@ export default function TableBase(props: DataGridProps) {
         disableRowSelectionOnClick
         {...props}
       />
-    </Paper>
+    // </Paper>
   );
 }

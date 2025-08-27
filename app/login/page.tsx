@@ -29,7 +29,7 @@ export default function Login() {
           variant="outlined"
           children={<Stack spacing={2} direction={'row'} >
             <Icon sx={{ justifyContent: 'center', alignContent: 'center' }} >
-              <DevicePhoneMobileIcon width={20} height={20} color="primary" />
+              <DevicePhoneMobileIcon  color="primary" />
             </Icon>
             {'Log in with Phone Number'}
           </Stack>} />
@@ -39,7 +39,7 @@ export default function Login() {
           variant="outlined"
           children={<Stack spacing={2} direction={'row'} >
             <Icon sx={{ justifyContent: 'center', alignContent: 'center' }} >
-              <EnvelopeIcon width={20} height={20} color="primary" />
+              <EnvelopeIcon  color="primary" />
             </Icon>
             {'Log in with Email'}
           </Stack>} />

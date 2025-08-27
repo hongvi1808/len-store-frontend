@@ -1,5 +1,6 @@
 'use client'
 import { categoryApis } from "@/base/apis/category.api";
+import { orderApis } from "@/base/apis/order.api";
 import { productApis } from "@/base/apis/product.api";
 import { ListParams } from "@/base/models/common.model";
 import { ProductModel } from "@/base/models/product.model";
@@ -16,32 +17,20 @@ import { GridColDef } from "@mui/x-data-grid";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
-interface ProductListByCategoryProps {
-    categoryId: string;
+interface ProductListByOrderProps {
+    orderId: string;
     openDiag: boolean
     onToggleDiag: () => void
 }
 
-export function ProductListByCategoryTable(props: ProductListByCategoryProps) {
+export function ProductListByOrderTable(props: ProductListByOrderProps) {
     const queryClient = useQueryClient();
     const [paginationModel, setPaginationModel] = useState<ListParams>({ page: 0, limit: 10 })
     // QUERY
     const { isLoading, data } = useQuery({
-        queryKey: ['admin-product-by-category', paginationModel, props.categoryId],
-        queryFn: async () => productApis.getListByCategory(props.categoryId,paginationModel),
-        enabled: !!props.categoryId
-    });
-    // MUTATE
-    const { mutate: removeMutate, isPending: removePending } = useMutation({
-        mutationFn: productApis.remove,
-        onError: (error) => {
-            console.error('Error calling api:', error);
-            showAlertError(error.message)
-        },
-        onSuccess: (data) => {
-            showAlertSuccess('Deleted a product!')
-            queryClient.invalidateQueries({ queryKey: ['admin-product-by-category', paginationModel, props.categoryId] });
-        },
+        queryKey: ['admin-product-by-order', paginationModel, props.orderId],
+        queryFn: async () => orderApis.getListOrderedProduct(props.orderId,paginationModel),
+        enabled: !!props.orderId
     });
 
     const columns: GridColDef[] = [
@@ -49,20 +38,20 @@ export function ProductListByCategoryTable(props: ProductListByCategoryProps) {
             field: 'order', headerName: 'Order', renderCell: (params) => (params.api.getRowIndexRelativeToVisibleRows(params.id) + 1)
         },
         { field: 'name', headerName: 'Name', flex: 1 },
-        { field: 'stock', headerName: 'Stock', flex: 1 },
+        { field: 'quantity', headerName: 'Quantity', flex: 1 },
         { field: 'price', headerName: 'Price', flex: 1 },
-        {
-            field: "action",
-            headerName: "", flex: 1,
-            renderCell: (params) => (
-                <Box>
-                    <ButtonIcon iconComp={<TrashIcon  />}
-                        buttonProps={{ color: 'error', loading: removePending }}
-                        onClick={() => removeMutate(params.row.id)} />
+        // {
+        //     field: "action",
+        //     headerName: "", flex: 1,
+        //     renderCell: (params) => (
+        //         <Box>
+        //             <ButtonIcon iconComp={<TrashIcon  />}
+        //                 buttonProps={{ color: 'error', loading: removePending }}
+        //                 onClick={() => removeMutate(params.row.id)} />
 
-                </Box>
-            ),
-        },
+        //         </Box>
+        //     ),
+        // },
     ];
     return (
          <Dialog fullWidth maxWidth={'md'} open={props.openDiag} onClose={() => props.onToggleDiag()}>
