@@ -34,23 +34,6 @@ export const inputsCustomizations: Components<Theme> = {
         variants: [
           {
             props: {
-              size: 'small',
-            },
-            style: {
-              height: '2.25rem',
-              padding: '4px 8px',
-            },
-          },
-          {
-            props: {
-              size: 'medium',
-            },
-            style: {
-              height: '2.5rem', // 40px
-            },
-          },
-          {
-            props: {
               color: 'primary',
               variant: 'contained',
             },
@@ -330,26 +313,6 @@ export const inputsCustomizations: Components<Theme> = {
           },
         }),
         variants: [
-          {
-            props: {
-              size: 'small',
-            },
-            style: {
-              width: '2.25rem',
-              height: '2.25rem',
-              padding: '0.25rem',
-              [`& .${svgIconClasses.root}`]: { fontSize: '1rem' },
-            },
-          },
-          {
-            props: {
-              size: 'medium',
-            },
-            style: {
-              width: '2.5rem',
-              height: '2.5rem',
-            },
-          },
         ],
       }),
     },

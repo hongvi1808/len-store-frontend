@@ -1,5 +1,6 @@
 
 export const SESSION_LOCAL_STORAGE_KEY = 'session'
+export const CART_LOCAL_STORAGE_KEY = 'cart'
 export const CLD_UPLOAD_PRESET_NAME = 'images'
 
 export const ROLE_ADMIN = 'Admin';

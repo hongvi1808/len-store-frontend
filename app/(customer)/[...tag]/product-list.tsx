@@ -1,30 +1,98 @@
 'use client'
-import { ProductCard, ProductExamp } from "@/components/product/product-card.comp";
-import {  Stack, } from "@mui/material"
+import { categoryApis } from "@/base/apis/category.api";
+import { productApis } from "@/base/apis/product.api";
+import { ListParams } from "@/base/models/common.model";
+import { ProductModel } from "@/base/models/product.model";
+import { brand, gray } from "@/base/ui/themePrimitive";
+import { ButtonBase } from "@/components/button/button-base.comp";
+import { ProductCardSkeleton } from "@/components/product/product-card-skeleton.comp";
+import { ProductCard } from "@/components/product/product-card.comp";
+import { Box, Stack, Typography, } from "@mui/material"
+import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 export function ProductListByTagComp({ filters }: { filters: string[] }) {
-    console.log('filter', filters)
-    const [tags, slugCategory] = filters
-    console.log('tag', tags, slugCategory)
-    const sample: ProductExamp = {
-        id: "p01",
-        name: "Tai nghe Bluetooth Chống Ồn Pro Max",
-        price: 1790000,
-        // oldPrice: 2590000,
-        imageUrl:
-            'https://bizweb.dktcdn.net/100/267/913/products/sg-11134201-7rbmg-loc1309wmzwx3c-1727665702999.jpg?v=1743839541293',
-        // rating: 4.6,
-        // sold: 321,
-    };
+    const [tag, slugCategory] = filters
+    const pathname = usePathname();
+    const [paginationModel, setPaginationModel] = useState<ListParams>({ page: 0, limit: 10 })
+    const [width, setWidth] = useState<number | null>(null);
+    const ref = useRef<HTMLDivElement>(null);
 
-    const handleAdd = (p: ProductExamp) => alert(`Thêm vào giỏ: ${p.name}`);
-    const handleBuy = (p: ProductExamp) => alert(`Mua ngay: ${p.name}`);
+    // QUERY
+    const { isLoading, data } = useQuery({
+        queryKey: ['customer-product-list-by-tag', paginationModel, tag, slugCategory,],
+        queryFn: slugCategory !== 'all' ? () => productApis.getListBySlugCategory(slugCategory, paginationModel)
+            : () => productApis.getListByTag(tag, paginationModel),
+        enabled: !!tag || !!slugCategory
+    });
+    // QUERY
+    const { isLoading: loadingCate, data: categories } = useQuery({
+        queryKey: ['customer-category-list-by-tag', tag],
+        queryFn: () => categoryApis.getListByTag(tag),
+        enabled: !!tag
+    });
+    useEffect(() => {
+        if (!ref.current) return;
+
+        const observer = new ResizeObserver((entries) => {
+            for (let entry of entries) {
+                setWidth(entry.contentRect.width);
+            }
+        });
+
+        observer.observe(ref.current);
+
+        return () => observer.disconnect();
+    }, []);
+
 
     return (
-        <Stack  gap={1} direction={'row'} flexWrap={'wrap'} justifyContent={'center'}>
-                {Array.from({ length: 30 }, (_, i) => (sample)).map((p, idx) => (
-                    <ProductCard key={idx} product={sample} onAddToCart={handleAdd} onBuyNow={handleBuy} />
-                ))}
-        </Stack>
+        <Box ref={ref}>
+            <Stack direction={'row'} sx={{overflowX: 'auto'}} spacing={2} marginBottom={2}>
+                <ButtonBase component={Link} href={`/${tag}/all`} 
+                 >
+                    <Typography
+                        variant="body1"
+                        sx={{
+                            textTransform: 'uppercase',
+                            transition: "transform 120ms ease",
+                            "&:hover": { transform: "translateY(-2px)" },
+                            textDecoration: 'all' === slugCategory ? "underline" : 'none',
+                            textDecorationThickness: "2px",
+                            textUnderlineOffset: "4px",
+                        }}
+                    > {'Tất cả'}
+                    </Typography>
+                </ButtonBase>
+                {(categories?.items || []).map((i: any) =>
+                    <ButtonBase component={Link} href={`/${tag}/${i.slug}`} >
+                        <Typography
+                            variant="body1"
+                            sx={{
+                                textTransform: 'uppercase',
+                                transition: "transform 120ms ease",
+                                "&:hover": { transform: "translateY(-2px)" },
+                                textDecoration: i.slug === slugCategory ? "underline" : 'none',
+                                textDecorationThickness: "2px",
+                                textUnderlineOffset: "4px",
+                            }}
+                        >{i.name}</Typography>
+                    </ButtonBase>)}
+
+            </Stack>
+
+            <Stack gap={1} direction={'row'} flexWrap={'wrap'} justifyContent={'flex-start'}>
+                {isLoading ? Array.from({ length: 10 }).map((p, idx) => (
+                    <ProductCardSkeleton parentWidth={width} key={idx} />
+                )) : (data?.items || [])?.map((p: any, idx: any) => (
+                    <ProductCard parentWidth={width} key={idx} product={p} />
+                ))
+                }
+                {!isLoading && !data?.items?.length && 
+                <Typography variant="body2">{'Hiện tại chưa có sản phẩm nào!'}</Typography>}
+            </Stack>
+        </Box>
     );
 }

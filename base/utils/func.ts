@@ -1,10 +1,29 @@
-import { SESSION_LOCAL_STORAGE_KEY } from "./constants"
+import { CartItemModel } from "../models/cart.model"
+import { CART_LOCAL_STORAGE_KEY, SESSION_LOCAL_STORAGE_KEY } from "./constants"
 
 export const getSessionLocal = () => {
     if (typeof window === 'undefined') return null
     const token = localStorage.getItem(SESSION_LOCAL_STORAGE_KEY)
     const tokenObj = token ? JSON.parse(token) : null
     return tokenObj
+}
+export const getCartLocal = () => {
+    if (typeof window === 'undefined') return null
+    const cart = localStorage.getItem(CART_LOCAL_STORAGE_KEY)
+    const cartObj = cart ? JSON.parse(cart) : null
+    return cartObj
+}
+export const setCartLocal = (cartItem: CartItemModel) => {
+    const cartObject = getCartLocal() || []
+    const itemFound = cartObject?.find((i: any) => i.id === cartItem.id)
+    if (itemFound) itemFound.quantity += itemFound.quantity
+    else cartObject.push(cartItem)
+    localStorage.setItem(CART_LOCAL_STORAGE_KEY, JSON.stringify(cartObject))
+}
+export const removeItemCartLocal = (cartItem: CartItemModel) => {
+    const cartObject = getCartLocal() || []
+    const updateCart = cartObject?.filter((i: any) => i.id !== cartItem.id)
+    localStorage.setItem(CART_LOCAL_STORAGE_KEY, JSON.stringify(updateCart))
 }
 
 export const validRequire = (value: string) => {

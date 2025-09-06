@@ -8,15 +8,14 @@ import { useRouter } from 'next/navigation';
 export function ButtonBack(props: ButtonProps) {
     const router = useRouter()
     return (
-        <Box sx={{ flex: '0 0 auto', marginLeft: '-14px' }}>
+        <Box sx={{ flex: '0 0 auto', marginLeft: '-14px', }}>
             <ButtonBase
                 onClick={() => router.back()}
-                children={<Icon sx={{ justifyContent: 'center', alignContent: 'center' }} >
-                    <ArrowLeftIcon  color="primary" />
-                </Icon>}
                 color='inherit'
                 {...props}
-            />
+            ><Icon sx={{ justifyContent: 'center', alignContent: 'center' }} >
+                    <ArrowLeftIcon  color="primary" />
+                </Icon></ButtonBase>
         </Box>
     );
 }

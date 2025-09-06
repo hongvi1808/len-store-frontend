@@ -1,5 +1,9 @@
-import { Box } from "@mui/material";
+import { Box, Container } from "@mui/material";
+import { CartTableComp } from "./cart-table.comp";
 
-export default function CartPage() {
-  return <Box>cart page</Box>
+export default async function CustomerCartPage() {
+    
+    return <Container >
+<CartTableComp customerId=""/>
+    </Container> 
 }

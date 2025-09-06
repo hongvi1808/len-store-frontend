@@ -13,13 +13,13 @@ export default function TableBase(props: DataGridProps) {
         disableColumnMenu
         disableAutosize
         disableColumnResize
-        // initialState={{
-        //   pagination: {
-        //     paginationModel: {
-        //       pageSize: 5,
-        //     },
-        //   },
-        // }}
+        initialState={{
+          pagination: {
+            paginationModel: {
+              pageSize: 5,
+            },
+          },
+        }}
         pageSizeOptions={[5, 10]}
         disableRowSelectionOnClick
         {...props}

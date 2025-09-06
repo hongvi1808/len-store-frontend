@@ -8,10 +8,11 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import { Button, Container, Divider, Drawer, Icon, MenuItem, TextField } from '@mui/material';
-import { Bars3Icon, BuildingStorefrontIcon, XMarkIcon } from '@heroicons/react/16/solid';
+import {  BuildingStorefrontIcon, ChevronDoubleDownIcon, XMarkIcon } from '@heroicons/react/16/solid';
 import { usePathname, useRouter } from 'next/navigation';
 import { ButtonBase } from '@/components/button/button-base.comp';
 import { brand } from '@/base/ui/themePrimitive';
+import { Bars3Icon, ChevronDoubleUpIcon, ChevronUpDownIcon } from '@heroicons/react/24/outline';
 
 const AppBar = styled(MuiAppBar)(({ theme }) => ({
     borderWidth: 0,
@@ -23,9 +24,11 @@ const AppBar = styled(MuiAppBar)(({ theme }) => ({
 
 export interface AppbarProps {
     menu: { title: string, href: string }[]
+    open: boolean;
+  onToggleLeftTool: (open: boolean) => void;
 }
 
-const StyledToolbar = styled(Toolbar)(({ theme }) => ({
+export const StyledToolbar = styled(Toolbar)(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -47,7 +50,9 @@ export default function Appbar(props: AppbarProps) {
     const toggleDrawer = (newOpen: boolean) => () => {
         setOpen(newOpen);
     };
-
+      const handleMenuOpen = React.useCallback(() => {
+        props.onToggleLeftTool(!props.open);
+      }, [props.open, props.onToggleLeftTool]);
     return (
         <AppBar
             position="fixed"
@@ -57,12 +62,22 @@ export default function Appbar(props: AppbarProps) {
                 bgcolor: 'transparent',
                 backgroundImage: 'none',
                 mt: 'calc(var(--template-frame-height, 0px))',
+                zIndex: theme.zIndex.drawer + 1,
+                mb: 2
+
             }}
         >
             <StyledToolbar variant="dense" disableGutters>
                 <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: 0 }}>
-
-                    <Stack direction="row" alignItems="center">
+                    <Stack direction="row" alignItems="center" justifyContent={'center'}>
+                    <IconButton
+                        onClick={handleMenuOpen} size="large" sx={{
+                            border: 'none',
+                            borderRadius: 2,
+                            background: 'transparent',
+                        }}>
+                        <Bars3Icon height={26} width={26} />
+                    </IconButton>
                         <Icon sx={{ justifyContent: 'center', alignContent: 'center', color: 'goldenrod', height: 30, width: 30 }} >
                             <BuildingStorefrontIcon height={30} width={30} />
                         </Icon>
@@ -86,7 +101,9 @@ export default function Appbar(props: AppbarProps) {
                                 onClick={() => router.push(item.href)}
                                 sx={{
                                     ml: 1,
-                                    backgroundColor: pathname === item.href ? brand[50] : "",
+                                    backgroundColor: pathname.startsWith(item.href.replace("/all", "")) ? brand[50] : "",
+                                    transition: "transform 120ms ease",
+                                    "&:hover": { transform: "scale(1.05)" },
                                 }}
                             >
                                 {item.title}
@@ -96,7 +113,7 @@ export default function Appbar(props: AppbarProps) {
                 </Box>
                 <Box
                     sx={{
-                        display: { xs: 'none', md: 'flex' },
+                        display: { xs: 'flex', md: 'flex' },
                         gap: 1,
                         alignItems: 'center',
                         marginX: 1
@@ -120,8 +137,8 @@ export default function Appbar(props: AppbarProps) {
                 </Box>
 
                 <Box sx={{ display: { xs: 'flex', md: 'none' }, gap: 1 }}>
-                    <IconButton aria-label="Menu button" onClick={toggleDrawer(true)}>
-                        <Icon><Bars3Icon /></Icon>
+                    <IconButton aria-label="Menu button" onClick={toggleDrawer(!open)}>
+                        <Icon>{open ? <XMarkIcon /> : <ChevronUpDownIcon />}</Icon>
                     </IconButton>
                     <Drawer
                         anchor="top"
@@ -134,21 +151,12 @@ export default function Appbar(props: AppbarProps) {
                         }}
                     >
                         <Box sx={{ p: 2, backgroundColor: 'background.default' }}>
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    justifyContent: 'flex-end',
-                                }}
-                            >
-                                <IconButton aria-label="Menu button" onClick={toggleDrawer(false)}>
-                                    <Icon><XMarkIcon /></Icon>
-                                </IconButton>
-                            </Box>
+                            <Toolbar />
                             {props.menu?.map((item, index) => (<MenuItem key={index}
                                 onClick={() => router.push(item.href)}
                                 sx={{
                                     ml: 1,
-                                    backgroundColor: pathname === item.href ? brand[50] : "",
+                                    backgroundColor: pathname.startsWith(item.href.replace("/all", "")) ? brand[50] : "",
                                 }} >
                                 {item.title}
                             </MenuItem>))}

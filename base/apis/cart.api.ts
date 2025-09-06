@@ -1,17 +1,11 @@
 import apiBase from "../axios/api-base";
 import { ListParams } from "../models/common.model";
 
-const urlDefault = '/category';
+const urlDefault = '/cart';
 
-export const categoryApis = {
+export const cartApis = {
     getList: (data: ListParams) => {
         return apiBase.get(`${urlDefault}?page=${data.page}&limit=${data.limit}`);
-    },
-    getListByTag: (tag: string) => {
-        return apiBase.get(`${urlDefault}/tag/${tag}`);
-    },
-    getById: (id: string) => {
-        return apiBase.get(`${urlDefault}/${id}`);
     },
     create: (data: any) => {
         return apiBase.post(`${urlDefault}`, data);
