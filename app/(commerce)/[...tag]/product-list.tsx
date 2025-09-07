@@ -2,8 +2,6 @@
 import { categoryApis } from "@/base/apis/category.api";
 import { productApis } from "@/base/apis/product.api";
 import { ListParams } from "@/base/models/common.model";
-import { ProductModel } from "@/base/models/product.model";
-import { brand, gray } from "@/base/ui/themePrimitive";
 import { ButtonBase } from "@/components/button/button-base.comp";
 import { ProductCardSkeleton } from "@/components/product/product-card-skeleton.comp";
 import { ProductCard } from "@/components/product/product-card.comp";
@@ -67,7 +65,7 @@ export function ProductListByTagComp({ filters }: { filters: string[] }) {
                     </Typography>
                 </ButtonBase>
                 {(categories?.items || []).map((i: any) =>
-                    <ButtonBase component={Link} href={`/${tag}/${i.slug}`} >
+                    <ButtonBase key={i.id} component={Link} href={`/${tag}/${i.slug}`} >
                         <Typography
                             variant="body1"
                             sx={{

@@ -1,30 +1,3 @@
-import { CartItemModel } from "../models/cart.model"
-import { CART_LOCAL_STORAGE_KEY, SESSION_LOCAL_STORAGE_KEY } from "./constants"
-
-export const getSessionLocal = () => {
-    if (typeof window === 'undefined') return null
-    const token = localStorage.getItem(SESSION_LOCAL_STORAGE_KEY)
-    const tokenObj = token ? JSON.parse(token) : null
-    return tokenObj
-}
-export const getCartLocal = () => {
-    if (typeof window === 'undefined') return null
-    const cart = localStorage.getItem(CART_LOCAL_STORAGE_KEY)
-    const cartObj = cart ? JSON.parse(cart) : null
-    return cartObj
-}
-export const setCartLocal = (cartItem: CartItemModel) => {
-    const cartObject = getCartLocal() || []
-    const itemFound = cartObject?.find((i: any) => i.id === cartItem.id)
-    if (itemFound) itemFound.quantity += itemFound.quantity
-    else cartObject.push(cartItem)
-    localStorage.setItem(CART_LOCAL_STORAGE_KEY, JSON.stringify(cartObject))
-}
-export const removeItemCartLocal = (cartItem: CartItemModel) => {
-    const cartObject = getCartLocal() || []
-    const updateCart = cartObject?.filter((i: any) => i.id !== cartItem.id)
-    localStorage.setItem(CART_LOCAL_STORAGE_KEY, JSON.stringify(updateCart))
-}
 
 export const validRequire = (value: string) => {
     if (!value.trim()) return '*Required field'
@@ -37,9 +10,9 @@ export const validPhone = (value: string) => {
     if (validRequire(value)) return validRequire(value)
     if (!(/^(0|\+84)(3|5|7|8|9)[0-9]{8}$/).test(value)) return 'Your number phone is invalid (in Vietnam)'
 }
-export const validEmail = (value: string) => {
-    if (validRequire(value)) return validRequire(value)
-    if (!(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/).test(value)) return 'Your email is invalid'
+export const validEmail = (value: string, unRequired?: boolean) => {
+    if (validRequire(value) && !unRequired) return validRequire(value)
+    if (value.trim() && !(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/).test(value)) return 'Your email is invalid'
 }
 
 export const regexVaid = (name: string) => {

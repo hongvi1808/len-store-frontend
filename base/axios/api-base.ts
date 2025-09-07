@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from "axios"
 import axiosClient from "./client"
 import { DataResponse, ListData } from "../models/common.model"
-import { getSessionLocal } from "../utils/func"
+import { store } from "../store"
 
 type Method = 'get' | 'post' | 'put' | 'delete'
 
@@ -10,7 +10,8 @@ interface RequestOptions {
     isLoading?: boolean,
 }
 const getAuthHeader = () => {
-    const token = getSessionLocal()?.accessToken
+    const sessionReducer = store.getState().session;
+    const token = sessionReducer.user.accessToken
     return token ?{ Authorization: `Bearer ${token}` } :{}
 }
 

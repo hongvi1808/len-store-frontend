@@ -4,6 +4,15 @@ export interface OrderModel {
     createdAt?: string;
     customerId?: string;
     totalPrice: number;
-    products: {id: string, name: string, price: number, quantity: number}[]
+    products: ProductOrderModel[]
 
+}
+
+export interface ProductOrderModel {
+    id: string,
+    image: string,
+    name: string,
+    price: number,
+    quantity: number,
+    classify: any
 }

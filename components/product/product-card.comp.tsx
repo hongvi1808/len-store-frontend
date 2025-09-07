@@ -13,10 +13,17 @@ import {
   IconButton,
 } from "@mui/material";
 import { HeartIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
-import { formatCurrency, setCartLocal } from "@/base/utils/func";
+import { formatCurrency } from "@/base/utils/func";
 import { ProductModel } from "@/base/models/product.model";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/base/store";
+import { updateLocalCart } from "@/base/store/slices/cart-local.slice";
+import { useMutation } from "@tanstack/react-query";
+import { cartApis } from "@/base/apis/cart.api";
+import { showAlertError } from "@/base/ui/toaster";
+import { goToOrder } from "@/base/store/slices/order.slice";
 
 
 export type ProductCardProps = {
@@ -27,20 +34,34 @@ export type ProductCardProps = {
 export function ProductCard({
   product, parentWidth
 }: ProductCardProps) {
-  const router= useRouter()
+  const router = useRouter()
+  const dispatch = useDispatch()
+  const { loggedIn } = useSelector((state: RootState) => state.session)
+  const { mutate, isPending } = useMutation({
+    mutationFn: cartApis.create,
+    onError: (error) => {
+      console.error('Error calling api:', error);
+      showAlertError(error.message)
+    },
+  });
   const { name, price, images, slug, id } = product;
 
   const onAddTocart = (e: any) => {
     e.preventDefault()
-    console.log('onaddTocart', product)
-    setCartLocal({id, product, quantity: 1, classify: ''})
-    // authen thi viet vao call api
-    
+    if (loggedIn) {
+      // authen thi viet vao call api
+      mutate({ product, quantity: 1, classify: '' })
+    }
+    else {
+      dispatch(updateLocalCart({ id: product.id, product, quantity: 1, classify: '' }))
+
+    }
+
 
   }
   const onBuyNow = (e: any) => {
     e.preventDefault()
-    // viet sp vao redux
+    dispatch(goToOrder([{ id, image: images?.[0], name, price, quantity: 1, classify: '' }]))
     router.push('/router')
     console.log('onBuyNow', product)
   }
@@ -98,7 +119,7 @@ export function ProductCard({
               <IconButton sx={{
                 size: { md: 'medium', sm: 'small' }, transition: "transform 120ms ease",
                 "&:hover": { transform: "translateY(-2px)", boxShadow: 4 },
-              }} onClick={onAddTocart}>
+              }} onClick={onAddTocart} loading={isPending}>
                 <ShoppingCartIcon height={16} width={16} />
               </IconButton>
 

@@ -10,11 +10,11 @@ const menu = [
     { title: 'Len sợi', href: '/wool/all' },
     { title: 'Dụng cụ', href: '/tool/all' },
     { title: 'Nguyên phụ liệu', href: '/material/all' },
-    { title: 'Combo', href: '/combo/all' },
-    { title: 'Khuyến mãi', href: '/promotion/all' },
+    // { title: 'Combo', href: '/combo/all' },
+    // { title: 'Khuyến mãi', href: '/promotion/all' },
     { title: 'Khác', href: '/other/all' },
 ]
-export default function CustomerRootLayout({
+export default function CommerceRootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;

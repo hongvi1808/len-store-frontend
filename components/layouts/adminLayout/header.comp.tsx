@@ -8,17 +8,17 @@ import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
-import { Avatar, Icon, Link, Menu, MenuItem } from '@mui/material';
+import { Avatar, CircularProgress, Icon, Link, Menu, MenuItem, Skeleton } from '@mui/material';
 import { Bars3Icon, ChevronDoubleLeftIcon, PowerIcon, UserIcon } from '@heroicons/react/16/solid';
-import { UserCircleIcon } from '@heroicons/react/24/solid';
-import { ButtonIcon } from '../../button/button-icon.comp';
 import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import { showAlertError } from '@/base/ui/toaster';
 import { ButtonIconText } from '../../button/buton-iconText.comp';
-import { getSessionLocal } from '@/base/utils/func';
 import { authApis } from '@/base/apis/auth.api';
-import { SESSION_LOCAL_STORAGE_KEY } from '@/base/utils/constants';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearSession } from '@/base/store/slices/session.slice';
+import { RootState, useAppDispatch, useAppSelector } from '@/base/store';
+import { getUserSessionThunk } from '@/base/store/thunks/user.thunk';
 
 const AppBar = styled(MuiAppBar)(({ theme }) => ({
   borderWidth: 0,
@@ -54,19 +54,25 @@ export default function Header({
 }: HeaderProps) {
   const router = useRouter();
   const theme = useTheme();
- const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-const { mutate, isPending } = useMutation({
-        mutationFn: authApis.logout,
-        onError: (error) => {
-            console.error('Error calling api:', error);
-            showAlertError(error.message)
+  const { loggedIn, user } = useSelector((state: RootState) => state.session)
+  const { loading, item: userInfo } = useAppSelector((state: RootState) => state.user)
+  const dispatch = useDispatch()
+  const dispatchAsync = useAppDispatch()
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-        },
-        onSuccess: (data) => {
-          localStorage.removeItem(SESSION_LOCAL_STORAGE_KEY)
-          router.push('/admin/login')
-        },
-    });
+  const { mutate, isPending } = useMutation({
+    mutationFn: authApis.logout,
+    onError: (error) => {
+      console.error('Error calling api:', error);
+      showAlertError(error.message)
+
+    },
+  });
+  React.useEffect(() => {
+    if (loggedIn && user.userId) {
+      dispatchAsync(getUserSessionThunk(user.userId))
+    }
+  }, [loggedIn])
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -96,10 +102,10 @@ const { mutate, isPending } = useMutation({
               onClick={handleMenuOpen}
             >
               {!isExpanded ? <Icon sx={{ justifyContent: 'center', alignContent: 'center' }} >
-                    <Bars3Icon  color="primary" />
-                </Icon>
-                 : <Icon sx={{ justifyContent: 'center', alignContent: 'center' }} >
-                    <ChevronDoubleLeftIcon  color="primary" />
+                <Bars3Icon color="primary" />
+              </Icon>
+                : <Icon sx={{ justifyContent: 'center', alignContent: 'center' }} >
+                  <ChevronDoubleLeftIcon color="primary" />
                 </Icon>}
             </IconButton>
           </div>
@@ -108,10 +114,13 @@ const { mutate, isPending } = useMutation({
     },
     [handleMenuOpen],
   );
-
+  const logout = () => {
+    dispatch(clearSession())
+    mutate()
+  }
   return (
     <AppBar color="inherit" position="absolute" sx={{ displayPrint: 'none' }}>
-      <Toolbar sx={{ backgroundColor: 'inherit',}}>
+      <Toolbar sx={{ backgroundColor: 'inherit', }}>
         <Stack
           direction="row"
           justifyContent="space-between"
@@ -143,42 +152,53 @@ const { mutate, isPending } = useMutation({
               </Stack>
             </Link>
           </Stack>
-            <Stack direction="row" alignItems="center">
-              <Tooltip title="Open settings">
+          <Stack direction="row" alignItems="center">
+            <Tooltip title="Open menu">
               <IconButton onClick={handleMenu} size='large' sx={{ p: 0 }}>
                 <Avatar
-            alt={'example'}
-            src=""
-            sx={{ width: 40, height: 40, margin: "0 auto" }}
-          />
+                  alt={'example'}
+                  src=""
+                  sx={{ width: 40, height: 40, margin: "0 auto" }}
+                />
               </IconButton>
             </Tooltip>
-                <Menu
-                 sx={{ mt: '45px' }}
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                {getSessionLocal()?.userId &&
-                <MenuItem onClick={() => router.push('/admin/profile')}>
-                  <ButtonIconText buttonProps={{ variant: 'text', color: 'inherit'}} iconComp={<UserIcon />} title='Profile'/>
-                </MenuItem>}
-                <MenuItem onClick={() => mutate()}>
-                  <ButtonIconText buttonProps={{loading: isPending, variant: 'text', color: 'inherit'}} iconComp={<PowerIcon />} title='Logout'/>
-                </MenuItem>
-              </Menu>
-            </Stack>
-            </Stack>
+            <Menu
+              sx={{ mt: '45px' }}
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              {!loading ?
+                <Box>
+                  <Stack padding={1} spacing={1} direction={'row'} alignItems={'center'}>
+                    <Avatar sizes='small' >A</Avatar>
+                    <Stack >
+                      <Typography variant='body1'>{userInfo.fullName}</Typography>
+                      <Typography variant='caption' color='textSecondary'>{userInfo.email}</Typography>
+                    </Stack>
+
+                  </Stack>
+                  <MenuItem onClick={() => router.push('/admin/profile')}>
+                    <ButtonIconText buttonProps={{ variant: 'text', color: 'inherit' }} iconComp={<UserIcon />} title='Profile' />
+                  </MenuItem>
+                  <MenuItem onClick={logout}>
+                    <ButtonIconText buttonProps={{ loading: isPending, variant: 'text', color: 'inherit' }} iconComp={<PowerIcon />} title='Logout' />
+                  </MenuItem>
+                </Box> : <CircularProgress />
+              }
+            </Menu>
+          </Stack>
+        </Stack>
       </Toolbar>
     </AppBar>
   );

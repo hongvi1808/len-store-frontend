@@ -1,9 +1,10 @@
 'use client'
 import { productApis } from "@/base/apis/product.api";
 import { CartItemModel } from "@/base/models/cart.model";
+import { updateLocalCart } from "@/base/store/slices/cart-local.slice";
 import { gray, orange, red } from "@/base/ui/themePrimitive";
 import { CART_LOCAL_STORAGE_KEY } from "@/base/utils/constants";
-import { formatCurrency, setCartLocal } from "@/base/utils/func";
+import { formatCurrency, } from "@/base/utils/func";
 import { ButtonIconText } from "@/components/button/buton-iconText.comp";
 import { ButtonBack } from "@/components/button/button-back.comp";
 import { MinusIcon, PlusIcon, ShoppingBagIcon } from "@heroicons/react/16/solid";
@@ -12,9 +13,11 @@ import { Box, Button, CardMedia, IconButton, Paper, Skeleton, Stack, TextField, 
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
+import { useDispatch } from "react-redux";
 
 export function DetailProductComp({ slug }: { slug: string }) {
     const router = useRouter();
+    const dispatch = useDispatch()
     const [selectImage, setSelectImage] = useState<string>()
     const [quantity, setQuantity] = useState(1);
     const { isLoading, data } = useQuery({
@@ -41,12 +44,12 @@ export function DetailProductComp({ slug }: { slug: string }) {
 
     const onAddTocart = (e: any) => {
         e.preventDefault()
-        setCartLocal({
+        dispatch(updateLocalCart({
             id: data?.id,
             classify: '',
             quantity: quantity,
             product: data,
-        })
+        }))
     }
     const onBuyNow = (e: any) => {
         e.preventDefault()

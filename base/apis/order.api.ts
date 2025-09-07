@@ -16,6 +16,9 @@ export const orderApis = {
     create: (data: any) => {
         return apiBase.post(`${urlDefault}`, data);
     },
+    customerOrder: (data: any) => {
+        return apiBase.post(`${urlDefault}/customer`, data);
+    },
     update: (data: any) => {
         return apiBase.put(`${urlDefault}/${data?.id}`, data);
     },

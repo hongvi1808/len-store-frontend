@@ -14,7 +14,7 @@ const queryClient = new QueryClient({
   },
   queryCache: new QueryCache({
     onError: (error: any) => {
-      console.error(error);
+      console.error('react query',error);
     },
   }),
 });

@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import './globals.css'
 import StyleRoot from "@/base/ui/style-root";
 import ReactQueryProvider from "@/base/react-query/provider";
+import { ReduxProvider } from "@/base/store/provider";
 const geistSans = Geist({
     variable: "--font-geist-sans",
     subsets: ["latin"],
@@ -22,11 +23,14 @@ export default function AuthRootLayout({
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
-                <ReactQueryProvider>
-                    <StyleRoot>
-                        {children}
-                    </StyleRoot>
-                </ReactQueryProvider>
+                <ReduxProvider>
+                    <ReactQueryProvider>
+                        <StyleRoot>
+                            {children}
+                        </StyleRoot>
+                    </ReactQueryProvider>
+                </ReduxProvider>
+
             </body>
         </html>
     );

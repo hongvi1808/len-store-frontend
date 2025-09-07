@@ -1,20 +1,18 @@
 'use client'
-import { ROLE_ADMIN, ROLE_CUSTOMER, ROLE_SELLER } from "@/base/utils/constants";
-import { getSessionLocal } from "@/base/utils/func";
+import { RootState } from "@/base/store";
+import { ROLE_ADMIN } from "@/base/utils/constants";
 import { Box, CircularProgress } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 export default function HomeAdmin() {
   const router = useRouter();
-
-    const session = getSessionLocal()
+  const { loggedIn, user} = useSelector((state: RootState) => state.session)
     useEffect(() => {
-        if (session?.role === ROLE_ADMIN) return router.replace('/admin/dashboard')
-        if (session?.role === ROLE_CUSTOMER) return router.replace('/')
-        if (session?.role === ROLE_SELLER) return router.replace('/admin/dashboard')
+        if (user.role === ROLE_ADMIN && loggedIn) return router.replace('/admin/dashboard')
         return router.replace('/admin/login')
-    }, [session])
+    }, [loggedIn])
   return<Box
             sx={{
                 display: "flex",

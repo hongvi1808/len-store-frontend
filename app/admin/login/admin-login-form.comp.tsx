@@ -1,15 +1,17 @@
 'use client'
 import { authApis } from "@/base/apis/auth.api";
+import { setSession } from "@/base/store/slices/session.slice";
 import { showAlertError } from "@/base/ui/toaster";
-import { SESSION_LOCAL_STORAGE_KEY } from "@/base/utils/constants";
 import { validRequire, validUsername } from "@/base/utils/func";
 import { TextFiledControlBase } from "@/components/textfield/textfield.comp"
 import { Box, Button } from "@mui/material"
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 
 export function AdminLoginForm() {
     const router = useRouter()
+    const dispatch  = useDispatch()
     const { mutate, isPending } = useMutation({
         mutationFn: authApis.login,
         onError: (error) => {
@@ -17,7 +19,7 @@ export function AdminLoginForm() {
             showAlertError(error.message)
         },
         onSuccess: (data) => {
-            localStorage.setItem(SESSION_LOCAL_STORAGE_KEY, JSON.stringify(data))
+            dispatch(setSession(data))
             router.push('/admin/dashboard')
 
         },

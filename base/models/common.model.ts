@@ -6,7 +6,7 @@ export interface ListParams {
 }
 
 export interface ListData<T> {
-    items: T;
+    items: T[];
     total: number;
     page: number;
     limit: number;
