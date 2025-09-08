@@ -38,3 +38,4 @@ export const formatCurrency = (
     currency,
     maximumFractionDigits: currency === "VND" ? 0 : 2,
   }).format(value);
+  

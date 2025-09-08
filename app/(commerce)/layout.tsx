@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { LayoutCustomer } from "@/components/layouts/customerLayout/layout-customer";
+import { Container, Toolbar } from "@mui/material";
 
 export const metadata: Metadata = {
     title: "Create Next App",
@@ -21,7 +22,10 @@ export default function CommerceRootLayout({
 }>) {
     return (
         <LayoutCustomer menu={menu}>
+            <Container>
+ <Toolbar sx={{ displayPrint: 'none' }} />
             {children}
+            </Container>
         </LayoutCustomer>
     );
 }

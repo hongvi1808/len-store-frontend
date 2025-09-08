@@ -12,12 +12,9 @@ export function LayoutCustomer({
 }) {
 
     return <Box >
-        <Appbar menu={menu}  />
-        
-            <Toolbar sx={{ displayPrint: 'none' }} />
-        <Container >
-            {children}
-        </Container>
+        <Appbar menu={menu} />
+       
+        {children}
     </Box>
 
 }
