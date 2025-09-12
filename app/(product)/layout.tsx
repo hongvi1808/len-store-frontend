@@ -9,6 +9,7 @@ const menu = [
     { title: 'Trang chủ', href: '/' },
     { title: 'Sản phẩm', href: '/handmade/all' },
     { title: 'Blog', href: '/blog' },
+    { title: 'Liên hệ', href: '/blog' },
 ]
 export default function CustomerRootLayout({
     children,

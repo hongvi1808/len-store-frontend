@@ -426,9 +426,15 @@ export const inputsCustomizations: Components<Theme> = {
 
   MuiOutlinedInput: {
     styleOverrides: {
-      input: {
-        padding: 0, // chỉ cho 1 dòng
-      },
+      input: ({ ownerState }) => ({
+          ...(ownerState.size === "small" && {
+            padding: "4px 8px", // padding cho size small
+          }),
+          ...(ownerState.size === "medium" && {
+            padding: "6px 12px", // padding cho size medium
+          }),
+        }),
+      
 
       root: ({ theme }) => ({
         padding: "8px 12px",

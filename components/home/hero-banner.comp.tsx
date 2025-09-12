@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import Fade from 'embla-carousel-fade'
@@ -11,26 +11,24 @@ import { ButtonIconText } from "../button/buton-iconText.comp";
 import { CursorArrowRaysIcon, LightBulbIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 
-const bannerImages = ['/images/banner1.jpg', '/images/banner2.jpg',  '/images/banner4.jpg']
+const bannerImages = ['/images/banner1.jpg', '/images/banner2.jpg',   ]
 
-export default function HeroSlider() {
+export default function HeroBanner() {
     const router = useRouter()
     const [emblaRef] = useEmblaCarousel({ loop: true, dragFree: true, }, [Autoplay({ delay: 3000 }), Fade()]);
     const controls = useAnimation();
 
   useEffect(() => {
     async function runSequence() {
-      // hiệu ứng 1: fade in + scale (chạy 1 lần)
       await controls.start({
         visibility: 'visible',
         x: [300, 0],
         transition: { duration: 2 },
       });
 
-      // hiệu ứng 2: xoay (lặp vô hạn)
       controls.start({
         scale:  [1,1.2,1],
-        transition: { duration: 0.5,  ease: "linear", repeat: 5, repeatDelay: 3 },
+        transition: { duration: 0.5,  ease: "linear", repeat: Infinity, repeatDelay: 3 },
       });
     }
     runSequence();
@@ -38,7 +36,7 @@ export default function HeroSlider() {
     return (
         <Box
             ref={emblaRef}
-            sx={{ overflow: 'hidden', position: 'relative', width: 'screen', top: 0, height: '90vh' }}
+            sx={{ overflow: 'hidden', position: 'relative', width: '100%', top: 0, left: 0, right: 0, height: '85vh' }}
         >
             <Box width={'100%'} height={'100%'} display={'flex'}>
                 {bannerImages.map((slide, index) => (
@@ -51,7 +49,7 @@ export default function HeroSlider() {
                             display: 'flex',
                         }}
                     >
-                        <Box className="fixed inset-0 bg-black/40"></Box>
+                        <Box className="absolute inset-0 bg-black/40"></Box>
                         <Stack width={'100%'} className="z-10" alignItems={'center'} justifyContent={'center'} sx={{ color: 'white' }}>
                             <Stack direction={'row'} spacing={1.5} alignItems={'center'}>
                                 {('Chào mừng bạn đến với').split("").map((char, i) => (
@@ -60,7 +58,7 @@ export default function HeroSlider() {
                                         component={motion.h1}
                                         initial={{ opacity: 0, }}
                                         transition={{
-                                            repeat: 5,
+                                            repeat: Infinity,
                                             repeatDelay: 3,
                                             duration: 0.6,
                                             delay: i * 0.1, // delay từng ký tự
@@ -76,7 +74,7 @@ export default function HeroSlider() {
                                         component={motion.h1}
                                         initial={{ opacity: 0, }}
                                         transition={{
-                                            repeat: 5,
+                                            repeat: Infinity,
                                             repeatDelay: 3,
                                             duration: 0.6,
                                             delay: (22+i) * 0.1, // delay từng ký tự
@@ -84,7 +82,7 @@ export default function HeroSlider() {
                                         }}
                                         animate={{ opacity: 1, y: [-50, 20, 0] }} 
                                         sx={{
-                                        background: "linear-gradient(135deg, #60A5FA, #22D3EE, #A78BFA)",
+                                        background: "linear-gradient(45deg, #ff6b6b, #feca57)",
                                         WebkitBackgroundClip: "text",
                                         WebkitTextFillColor: "transparent",
                                         fontWeight: '700',
@@ -96,19 +94,19 @@ export default function HeroSlider() {
                                     </Typography>))}
                             </Stack>
 
-                            <Typography textAlign={'center'} letterSpacing={0.5} mt={6} width={'50%'}
+                            <Typography  textAlign={'center'} letterSpacing={0.5} mt={6} width={'50%'}
                                 component={motion.h1} variant="subtitle1"
                                 initial={{ opacity: 0, }} color={gray[100]}
                                 transition={{ duration: 2, }}
                                 animate={{ opacity: 0.8, y: [300, -20, 0] }}>
-                                Thế giới của những món quà từ len sợi hoàn toàn thủ công.
+                                Thế giới của những món quà làm từ len sợi hoàn toàn thủ công.
                                 Bên cạnh những mặt hàng đã có, <span style={{
                                         background: "linear-gradient(135deg, #60A5FA, #22D3EE, #A78BFA)",
                                         WebkitBackgroundClip: "text",
                                         WebkitTextFillColor: "transparent",
                                         fontWeight: '700',
                                         whiteSpace: 'nowrap', width: 'auto' 
-                                    }}>LenStore</span> rất sẵn sàng thực hiện mẫu sản phẩm
+                                    }}>LenStore</span> rất sẵn sàng thực hiện các mẫu sản phẩm
                                 theo ý tưởng và yêu cầu của bạn!
                             </Typography>
                             <Stack direction={'row'} spacing={3} mt={8}>

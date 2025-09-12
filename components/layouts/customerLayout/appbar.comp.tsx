@@ -68,6 +68,7 @@ export const StyledToolbar = styled(Toolbar)(({ theme }) => ({
         : alpha(theme.palette.background.default, 0.4),
     boxShadow: (theme.vars || theme).shadows[1],
     padding: '8px 12px',
+    
 }));
 function ElevationScroll({ children }: { children: React.ReactElement }) {
     const trigger = useScrollTrigger({
@@ -138,7 +139,7 @@ export default function Appbar(props: AppbarProps) {
         }
     }
     return (
-        <ElevationScroll>
+        <ElevationScroll >
             <AppBar
                 position="fixed"
                 enableColorOnDark

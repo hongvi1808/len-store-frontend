@@ -125,19 +125,19 @@ export const navigationCustomizations: Components<Theme> = {
         position: 'relative',
         textDecoration: 'none',
         width: 'fit-content',
-        '&::before': {
-          content: '""',
+        // '&::before': {
+       
+        // },
+        '&:hover::before': {
+            content: '""',
           position: 'absolute',
           width: '100%',
           height: '1px',
           bottom: 0,
           left: 0,
-          backgroundColor: (theme.vars || theme).palette.text.secondary,
+          backgroundColor: (theme.vars || theme).palette.primary.main,
           opacity: 0.3,
           transition: 'width 0.3s ease, opacity 0.3s ease',
-        },
-        '&:hover::before': {
-          width: 0,
         },
         '&:focus-visible': {
           outline: `3px solid ${alpha(brand[500], 0.5)}`,
