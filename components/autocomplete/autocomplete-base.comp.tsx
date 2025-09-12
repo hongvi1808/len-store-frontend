@@ -11,15 +11,16 @@ type AutocompleteBaseProps<
   Multiple extends boolean | undefined = false,
   DisableClearable extends boolean | undefined = false,
   FreeSolo extends boolean | undefined = false
-> = AutocompleteProps<T, Multiple, DisableClearable, FreeSolo> & {
+> = AutocompleteProps<T, Multiple, DisableClearable, FreeSolo>
+interface SelectBaseProps<T, Multiple extends boolean | undefined = false> {
+  selectProps: AutocompleteBaseProps<T, Multiple, true, false>
   label?: string;
   name: string
   default?: any;
   required?: boolean
   values?: (value: any) => void
-};
-
-export function AutocompleteBase<T, Multiple extends boolean | undefined = false>(props: AutocompleteBaseProps<T, Multiple, true, false>) {
+}
+export function AutocompleteBase<T, Multiple extends boolean | undefined = false>(props: SelectBaseProps<T, Multiple>) {
   const [selected, setSelected] = useState<any>();
 
   useEffect(() => {
@@ -27,11 +28,12 @@ export function AutocompleteBase<T, Multiple extends boolean | undefined = false
   }, [props.default]);
   const handleOnBlur = (e: any) => {
     if (props.values) props.values(selected)
-  }
+    }
+    console.log('sele', selected)
   return (<>
     <Autocomplete
       fullWidth
-      {...props}
+      {...props.selectProps}
       sx={{
         "& .MuiButtonBase-root": {
           height: '1.75rem  !important',
@@ -39,15 +41,15 @@ export function AutocompleteBase<T, Multiple extends boolean | undefined = false
           mr: '2px'
         },
         "& .MuiInputBase-root": {
-          height: props?.multiple  ?'3rem  !important' : '2.25rem  !important',
+          height: props?.selectProps.multiple ? '3rem  !important' : '2.25rem  !important',
         },
-       
+
       }}
-      value={selected || props.defaultValue || (props.multiple ? [] : null)}
+      value={selected || props.selectProps.defaultValue || (props.selectProps.multiple ? [] : null)}
       onChange={(e, newValue) => setSelected(newValue)}
       onBlur={handleOnBlur}
       renderInput={(params) => <TextFiledControlBase
-        inputProps={{ ...params,}}
+        inputProps={{ ...params, }}
         name={props.name}
         getErrorMessage={(v) => props.required ? validRequire(v) : ''}
         label={props.label} />}

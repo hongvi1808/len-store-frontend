@@ -76,11 +76,12 @@ export function ProductListForm() {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
         const data = Object.fromEntries(formData.entries())
-        if (!urlImage?.length) return showAlertError('Please add image product')
+        if (!urlImage?.length) { showAlertError('Please add image product'); return;}
         if (item) updateMutate({ ...data, id: item.id, categoryIds: selectedCategory, images: urlImage })
         else createMutate({ ...data, categoryIds: selectedCategory, images: urlImage })
     }
     const onToggleDiaglog = (selectedItem: ProductModel | null) => {
+        if (selectedItem) setUrlImages(selectedItem.images)
         setItem(selectedItem)
         setOpenDiag(!openDiag)
     }
@@ -137,6 +138,7 @@ export function ProductListForm() {
                     >
                         <ButtonUpload
                             id='images'
+                            defaults={urlImage}
                             title="Add Images"
                             onUrlChange={(urls) => setUrlImages( urls)}
                         />
@@ -148,16 +150,19 @@ export function ProductListForm() {
                         />
 
                         <AutocompleteBase<any, true>
-                            multiple
-                            // required
-                            options={categories?.items || []}
                             label="Category"
-                            default={categories?.items.filter((i: any) => item?.categoryIds?.includes(i.id))}
+                            // default={categories?.items.filter((i: any) => item?.categoryIds?.includes(i.id))}
                             name="categoryIds"
-                            loading={categoryLoading}
-                            getOptionLabel={(op) => op.name}
                             values={(value) => setSelectedCategory(value?.map((i: any) => i.id) || [])}
-                            renderInput={(param) => <></>}
+                            selectProps={{
+                                multiple: true, 
+                                options:categories?.items || [],
+                                renderInput: (param) => <></>,
+                                getOptionLabel:(op) => op.name,
+                                isOptionEqualToValue: (option, v) => option.id === v.id,
+                                loading: categoryLoading,
+                                defaultValue: categories?.items.filter((i: any) => item?.categoryIds?.includes(i.id))
+                             }}
                         />
 
 

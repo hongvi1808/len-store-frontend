@@ -2,7 +2,6 @@
 
 import { Box,  } from "@mui/material"
 import Appbar from "./appbar.comp";
-import Footer from "./footer.comp";
 
 export function LayoutCustomer({
     children,
@@ -16,7 +15,7 @@ export function LayoutCustomer({
         <Appbar menu={menu} />
        
         {children}
-        <Footer/>
+       
     </Box>
 
 }

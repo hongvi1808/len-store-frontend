@@ -64,7 +64,7 @@ export function CategoryListForm() {
         onSuccess: async (data) => {
             showAlertSuccess('Updated a category!')
             onToggleDiaglog(null)
-            await queryClient.refetchQueries({ queryKey: ['admin-category', paginationModel] }, {cancelRefetch: true});
+            await queryClient.refetchQueries({ queryKey: ['admin-category', paginationModel] }, { cancelRefetch: true });
         },
     });
 
@@ -94,13 +94,13 @@ export function CategoryListForm() {
             headerName: "", flex: 1,
             renderCell: (params) => (
                 <Box>
-                    <ButtonIcon iconComp={<PencilSquareIcon  />}
+                    <ButtonIcon iconComp={<PencilSquareIcon />}
                         buttonProps={{ color: 'primary' }}
                         onClick={() => onToggleDiaglog(params.row)} />
-                    <ButtonIcon iconComp={<QueueListIcon  />}
+                    <ButtonIcon iconComp={<QueueListIcon />}
                         buttonProps={{ color: 'secondary' }}
                         onClick={() => onToggleProductListDiaglog(params.row)} />
-                    <ButtonIcon iconComp={<TrashIcon  />}
+                    <ButtonIcon iconComp={<TrashIcon />}
                         buttonProps={{ color: 'error', loading: removePending }}
                         onClick={() => removeMutate(params.row.id)} />
 
@@ -129,7 +129,7 @@ export function CategoryListForm() {
                 columns={columns}
             />
             <Dialog fullWidth maxWidth={'md'} open={openDiag} onClose={() => onToggleDiaglog(null)}>
-                <DialogTitle>{item? 'Update category': 'Add new category'}</DialogTitle>
+                <DialogTitle>{item ? 'Update category' : 'Add new category'}</DialogTitle>
                 <DialogContent>
                     <Box
                         component="form"
@@ -137,31 +137,33 @@ export function CategoryListForm() {
                         onSubmit={handleSubmit}
                         sx={{ display: 'flex', flexDirection: 'column', gap: 2, }}
                     >
-                                <TextFiledControlBase
-                                    name='name'
-                                    label="Name*"
-                                    inputProps={{ required: true, defaultValue: item?.name }}
-                                    getErrorMessage={validRequire}
-                                />
-                                <AutocompleteBase<string, false>
-                                options={TAGS_CATEGORY}
-                                label="Tag"
-                                name="tag"
-                                default={item?.tag}
-                                defaultValue={'other'}
-                                renderInput={(param) => <></>}
-                            />
+                        <TextFiledControlBase
+                            name='name'
+                            label="Name*"
+                            inputProps={{ required: true, defaultValue: item?.name }}
+                            getErrorMessage={validRequire}
+                        />
+                        <AutocompleteBase<any, false>
+                            label="Tag"
+                            default={item?.tag}
+                            name="tag"
+                            selectProps={{
+                                options: TAGS_CATEGORY,
+                                renderInput: (param) => <></>,
+                                defaultValue: 'other'
+                            }}
+                        />
 
                     </Box>
                 </DialogContent>
                 <DialogActions sx={{ margin: 2 }} >
-                    <ButtonIconText iconComp={<XMarkIcon  />}
+                    <ButtonIconText iconComp={<XMarkIcon />}
                         title="Cancel"
                         buttonProps={{ color: 'error', variant: 'outlined', size: 'medium' }}
                         onClick={() => onToggleDiaglog(null)}
                     />
                     <ButtonIconText
-                        iconComp={<ArrowRightStartOnRectangleIcon  />}
+                        iconComp={<ArrowRightStartOnRectangleIcon />}
                         title="Submit"
                         buttonProps={{ type: "submit", size: 'medium', loading: item ? updatePending : createPending, form: 'add-category-form' }}
                     />

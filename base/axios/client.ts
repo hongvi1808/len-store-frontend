@@ -1,7 +1,8 @@
 import axios from "axios";
 import { showAlertError } from "../ui/toaster";
 import { SESSION_LOCAL_STORAGE_KEY } from "../utils/constants";
-// import { getSessionLocal } from "../utils/func";
+import { store } from "../store";
+import { setSession } from "../store/slices/session.slice";
 
 const axiosClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -23,7 +24,7 @@ axiosClient.interceptors.response.use(
         withCredentials: true,
       });
       if (res?.data?.success)
-        localStorage.setItem(SESSION_LOCAL_STORAGE_KEY, JSON.stringify(res.data.data))
+        store.dispatch(setSession(res.data.data))
     } catch (err) {
       console.error("Refresh token failed", err);
     }
@@ -36,25 +37,25 @@ axiosClient.interceptors.response.use(
   }
 )
 
-// axiosClient.interceptors.request.use(async (config) => {
-//   const tokenObj = getSessionLocal()
-//   if (tokenObj && tokenObj.accessToken && (tokenObj.expireAt - Math.floor(Date.now() / 1000) <= 5 * 60)) {
-//     // gọi API refresh
-//     try {
-//       const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`, {
-//         withCredentials: true,
-//       });
-//       if (res.data.success)
-//         localStorage.setItem(SESSION_LOCAL_STORAGE_KEY, JSON.stringify(res.data.data))
+axiosClient.interceptors.request.use(async (config) => {
+  const {accessToken, expiredAt} = store.getState().session.user
+  if (accessToken && (expiredAt - Math.floor(Date.now() / 1000) <= 5 * 60)) {
+    // gọi API refresh
+    try {
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`, {
+        withCredentials: true,
+      });
+      if (res.data.success)
+        store.dispatch(setSession(res.data.data))
 
-//       config.headers.Authorization = `Bearer ${res.data.data.accessToken}`;
-//     } catch (err) {
-//       console.error("Refresh token failed", err);
-//     }
-//   }
+      config.headers.Authorization = `Bearer ${res.data.data.accessToken}`;
+    } catch (err) {
+      console.error("Refresh token failed", err);
+    }
+  }
 
-//   return config;
-// });
+  return config;
+});
 
 
 

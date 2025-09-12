@@ -1,12 +1,7 @@
-'use client'
 import { Box, CircularProgress } from "@mui/material";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 
-export default function HomeAdmin() {
-    const router = useRouter()
-    useEffect(() => { router.replace('/admin/dashboard')}, [])
+export default function LoadingPage() {
   return <Box
             sx={{
                 display: "flex",

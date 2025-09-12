@@ -3,6 +3,7 @@ import { ButtonBack } from "@/components/button/button-back.comp";
 import { AdminLoginForm } from "./admin-login-form.comp";
 
 export default function AdminLogin() {
+  
   return (
     <Stack spacing={4} sx={{ justifyContent: "center", padding: 2, }}>
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>

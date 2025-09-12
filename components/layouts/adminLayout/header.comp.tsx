@@ -65,8 +65,11 @@ export default function Header({
     onError: (error) => {
       console.error('Error calling api:', error);
       showAlertError(error.message)
-
     },
+    onSuccess: (data) => {
+      if (data)
+      dispatch(clearSession())
+    }
   });
   React.useEffect(() => {
     if (loggedIn && user.userId) {
@@ -115,7 +118,6 @@ export default function Header({
     [handleMenuOpen],
   );
   const logout = () => {
-    dispatch(clearSession())
     mutate()
   }
   return (

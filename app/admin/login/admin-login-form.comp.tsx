@@ -19,6 +19,7 @@ export function AdminLoginForm() {
             showAlertError(error.message)
         },
         onSuccess: (data) => {
+            console.log('dataa', data)
             dispatch(setSession(data))
             router.push('/admin/dashboard')
 

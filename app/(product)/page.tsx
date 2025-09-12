@@ -8,6 +8,7 @@ import { NewItemsSection } from "@/components/home/new-items.comp";
 import { HotItemSection } from "@/components/home/hot-item.comp";
 import { Stack } from "@mui/material";
 import { PartnerContactSection } from "@/components/home/partner-contact-section.comp";
+import Footer from "@/components/layouts/customerLayout/footer.comp";
 
 export default function Home() {
   return <Stack alignItems={'center'}
@@ -15,7 +16,7 @@ export default function Home() {
       backgroundImage: `linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url(${'/images/wool.jpg'})`,
       backgroundSize: "cover",
       backgroundPosition: "center",
-      backgroundAttachment: "fixed", marginBottom: -6
+      backgroundAttachment: "fixed", 
     }}
   >
     <HeroBanner />
@@ -55,5 +56,8 @@ export default function Home() {
         <PartnerContactSection />
       </FadeInSection>
     </Stack>
+      <FadeInSection>
+        < Footer/>
+      </FadeInSection>
   </Stack>
 }

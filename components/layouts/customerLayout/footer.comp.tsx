@@ -30,7 +30,7 @@ export default function Footer() {
     }
   }
   return (
-    <Box component="footer" mt={6} sx={{ bgcolor: gray[50], color: gray[900], pt: 6, }}>
+    <Box component="footer" sx={{ bgcolor: gray[50], color: gray[900], pt: 6, }}>
       <Container maxWidth="lg" >
         <Stack
           direction={{ xs: "column", md: "row" }}
@@ -58,7 +58,7 @@ export default function Footer() {
               </Typography>
             </Stack>
             <Typography variant="body2" color="grey.500">
-              Nâng niu từng sản phẩm, trao gửi trọn yêu thương đến khách hàng.
+              Nâng niu từng sản phẩm, trao gửi trọn yêu thương đến mỗi khách hàng.
             </Typography>
             <Box>
               <Stack direction={'row'} spacing={2} alignItems={'center'}>

@@ -113,9 +113,12 @@ export default function Appbar(props: AppbarProps) {
             showAlertError(error.message)
 
         },
+         onSuccess: (data) => {
+              if (data)
+              dispatch(clearSession())
+            }
     });
     const logout = () => {
-        dispatch(clearSession())
         mutate()
     }
 

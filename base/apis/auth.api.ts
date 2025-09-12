@@ -16,6 +16,6 @@ export const authApis = {
         return apiBase.get(`${urlDefault}/google/callback`);
     },
     logout: () => {
-        return apiBase.get(`${urlDefault}/logout`, {});
+        return apiBase.get(`${urlDefault}/logout`, );
     },
 }
