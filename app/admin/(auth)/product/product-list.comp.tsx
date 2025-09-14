@@ -77,6 +77,7 @@ export function ProductListForm() {
         const formData = new FormData(event.currentTarget);
         const data = Object.fromEntries(formData.entries())
         if (!urlImage?.length) { showAlertError('Please add image product'); return;}
+        if (!selectedCategory?.length) return;
         if (item) updateMutate({ ...data, id: item.id, categoryIds: selectedCategory, images: urlImage })
         else createMutate({ ...data, categoryIds: selectedCategory, images: urlImage })
     }
@@ -151,6 +152,7 @@ export function ProductListForm() {
 
                         <AutocompleteBase<any, true>
                             label="Category"
+                            required
                             // default={categories?.items.filter((i: any) => item?.categoryIds?.includes(i.id))}
                             name="categoryIds"
                             values={(value) => setSelectedCategory(value?.map((i: any) => i.id) || [])}

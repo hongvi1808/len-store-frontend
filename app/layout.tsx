@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
     subsets: ["latin"],
 });
 
-export default function AuthRootLayout({
+export default function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;

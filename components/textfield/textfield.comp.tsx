@@ -1,7 +1,7 @@
 'use client'
 import { regexVaid } from "@/base/utils/func";
 import { BaseTextFieldProps, FormControl, FormLabel, TextField, } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function TextFieldBase(props: BaseTextFieldProps) {
     return <TextField
@@ -16,10 +16,12 @@ export interface ITextFieldControlBaseProps {
     label?: string
     inputProps?: BaseTextFieldProps
     getErrorMessage?: (value: any) => string | undefined
+    errorMessage?: any
 
 }
 export function TextFiledControlBase(props: ITextFieldControlBaseProps) {
-    const [errorMessage, setErrorMessage] = useState<string>();
+    const [errorMessage, setErrorMessage] = useState<string | undefined>(props.errorMessage);
+    useEffect(() => setErrorMessage(props.errorMessage), [props.errorMessage])
     const onBlurHandle = (event: any) => {
         const value = event.target.value;
         if (props.getErrorMessage) {

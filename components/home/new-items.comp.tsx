@@ -15,7 +15,6 @@ export function NewItemsSection() {
     const { data, isLoading } = useQuery({
         queryKey: ['products-new-handmade'],
         queryFn: () => productApis.getListByTag('handmade', { limit: 10, page: 0 }),
-        refetchInterval: 1000 * 60 * 5, // 5 phút
     })
     return (<Stack spacing={{ sm: 4, md: 6, lg: 8 }} width={'100%'} alignItems={'center'} mb={8} >
         <Stack width={'100%'} alignItems={'center'} spacing={2} >

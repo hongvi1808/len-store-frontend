@@ -277,10 +277,10 @@ export default function Appbar(props: AppbarProps) {
                                             alignItems: 'center', ml: 1
                                         }}
                                     >
-                                        <Button size='small' color="primary" variant="outlined" >
+                                        <Button onClick={() => router.push('/login')} size='small' color="primary" variant="outlined" >
                                             Đăng nhập
                                         </Button>
-                                        <Button size='small' color="primary" variant="contained" >
+                                        <Button onClick={() => router.push('/register')} size='small' color="primary" variant="contained" >
                                             Đăng ký
                                         </Button>
                                     </Box>}
@@ -328,12 +328,12 @@ export default function Appbar(props: AppbarProps) {
 
                                         <Divider sx={{ my: 3 }} />
                                         <MenuItem>
-                                            <Button color="primary" variant="contained" fullWidth>
+                                            <Button onClick={() => router.push('/register')} color="primary" variant="contained" fullWidth>
                                                 Đăng ký
                                             </Button>
                                         </MenuItem>
                                         <MenuItem>
-                                            <Button color="primary" variant="outlined" fullWidth>
+                                            <Button onClick={() => router.push('/login')} color="primary" variant="outlined" fullWidth>
                                                 Đăng nhập
                                             </Button>
                                         </MenuItem>

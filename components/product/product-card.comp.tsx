@@ -66,7 +66,7 @@ export function ProductCard({
     console.log('onBuyNow', product)
   }
   const getWidthCard = (col: number) => {
-    if (!parentWidth) return 275;
+    if (!parentWidth) return 250;
     return (parentWidth - 8 * col) / col
   }
 

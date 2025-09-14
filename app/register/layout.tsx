@@ -3,10 +3,10 @@ import { Paper } from "@mui/material";
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: "Đăng nhập LenStore",
-    description: "Khách hàng đăng nhập vào LenStore",
+    title: "Đăng ký tài khoản LenStore",
+    description: "Khách hàng đăng ký vào LenStore",
 };
-export default function LoginPageLayout({
+export default function RegisterPageLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;

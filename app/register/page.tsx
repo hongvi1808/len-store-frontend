@@ -4,7 +4,7 @@ import NextLink from "next/link";
 import { DevicePhoneMobileIcon, EnvelopeIcon } from "@heroicons/react/16/solid";
 import { ButtonBack } from "@/components/button/button-back.comp";
 
-export default function Login() {
+export default function Register() {
   return (
     <Stack spacing={4} sx={{ justifyContent: "center", padding: 2, }}>
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -46,7 +46,7 @@ export default function Login() {
         <Typography sx={{ textAlign: 'center' }}>
           {"Don't you have an account? "}
           <Link
-            href="/register"
+            href="phone/login"
             variant="body2"
             sx={{ alignSelf: 'center' }}
           >

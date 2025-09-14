@@ -1,22 +1,21 @@
 'use client'
-import { ListParams } from "@/base/models/common.model";
-import { Box, Stack, Typography } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
-import { useEffect, useRef, useState } from "react";
-import { ProductCardSkeleton } from "./product-card-skeleton.comp";
+import { Box, Pagination, Stack, Typography } from "@mui/material";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ProductCard } from "./product-card.comp";
-import { productApis } from "@/base/apis/product.api";
-import { ButtonBase } from "../button/button-base.comp";
+import { ProductModel } from "@/base/models/product.model";
+import { useRouter, useSearchParams } from "next/navigation";
 
 
 export type ProductListProps = {
-    slugCategory: string; tag: string, limit?: number;
+    items: ProductModel[]
+    totalPage: number
 };
-export function ProductList({slugCategory, tag, limit}: ProductListProps) {
-    const [paginationModel, setPaginationModel] = useState<ListParams>({ page: 0, limit: limit || 10 })
+export function ProductList({ items, totalPage }: ProductListProps) {
+    const searchParams = useSearchParams()
+    const router = useRouter();
     const [width, setWidth] = useState<number | null>(null);
     const ref = useRef<HTMLDivElement>(null);
-useEffect(() => {
+    useEffect(() => {
         if (!ref.current) return;
 
         const observer = new ResizeObserver((entries) => {
@@ -27,28 +26,31 @@ useEffect(() => {
         observer.observe(ref.current);
         return () => observer.disconnect();
     }, []);
+    const handleChangePage = (e: any, page: number) => {
+        const params = new URLSearchParams(searchParams.toString())
+        params.set('page', page.toString());
+        router.push(`?${params.toString()}`);
+    }
 
-     // QUERY
-    const { isLoading, data } = useQuery({
-        queryKey: ['customer-product-list-by-tag', paginationModel, tag, slugCategory,],
-        queryFn: slugCategory !== 'all' ? () => productApis.getListBySlugCategory(slugCategory, paginationModel)
-            : () => productApis.getListByTag(tag, paginationModel),
-        enabled: !!tag || !!slugCategory
-    });
     return (
         <Box width={'100%'} ref={ref} >
 
-        <Stack gap={2} direction={'row'} flexWrap={'wrap'} justifyContent={'flex-start'}>
-                {isLoading ? Array.from({ length: 10 }).map((p, idx) => (
-                    <ProductCardSkeleton parentWidth={width} key={idx} />
-                )) : (data?.items || [])?.map((p: any, idx: any) => (
+            <Stack gap={2} direction={'row'} flexWrap={'wrap'} justifyContent={'flex-start'}>
+                {(items || [])?.map((p: any, idx: any) => (
                     <ProductCard parentWidth={width} key={idx} product={p} />
-                ))
-            }
-                {!isLoading && !data?.items?.length && 
-                <Typography variant="body2">{'Hiện tại chưa có sản phẩm nào!'}</Typography>}
+                ))}
+                {!items?.length &&
+                    <Typography variant="body2">{'Hiện tại chưa có sản phẩm nào!'}</Typography>}
             </Stack>
-                </Box>
+            {totalPage > 1 &&
+                <Pagination sx={{ justifySelf: 'center', mt: 5 }}
+                    count={totalPage} shape="rounded"
+                    color="primary"
+                    defaultPage={Number(searchParams.get('page'))}
+                    onChange={handleChangePage}
+                />}
+
+        </Box>
     )
 
 }

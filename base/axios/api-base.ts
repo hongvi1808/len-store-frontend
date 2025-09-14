@@ -35,14 +35,13 @@ async function request<T = any>(
         ...options
 
     }
-
     const res: DataResponse<T> = (await axiosClient.request<DataResponse<T>>(config))?.data
     return res?.data
 }
 
 // Các method tiện dụng
 const apiBase = {
-    get: <T = any>(url: string, options?: RequestOptions & AxiosRequestConfig) => request<T>('get', url, null, options),
+    get: <T = any>(url: string, options?: RequestOptions & AxiosRequestConfig) => request<T>('get', url, {}, options),
     post: <T = any>(url: string, data: any, options?: RequestOptions & AxiosRequestConfig) => request<T>('post', url, data, options),
     put: <T = any>(url: string, data: any, options?: RequestOptions & AxiosRequestConfig) => request<T>('put', url, data, options),
     delete: <T = any>(url: string, options?: RequestOptions & AxiosRequestConfig) => request<T>('delete', url, {}, options),

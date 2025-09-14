@@ -1,5 +1,11 @@
 import Stack from '@mui/material/Stack';
 import { Paper } from "@mui/material";
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: "Đăng nhập Admin",
+    description: "Đăng nhập vào hệ thống bán hàng LenStore",
+};
 
 export default function AdminAuthRootLayout({
     children,
