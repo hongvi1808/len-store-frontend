@@ -8,7 +8,7 @@ export function CardImageProduct({images} : {images: string[]}) {
              setSelectImage(url)
          }, [images])
     return (
-         <Stack flex={1.2} spacing={1} >
+         <Stack flex={1.2} spacing={1} mx={5} >
       <Paper  >
         <CardMedia
           component="img"

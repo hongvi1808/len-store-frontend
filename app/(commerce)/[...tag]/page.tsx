@@ -28,17 +28,18 @@ async function fetchProductList(tag: string, slug: string, pageNumber: number) {
 
 
 export default async function ProductByTagPage({ params, searchParams }:
-    { params: Promise<{ tag: string[], page: string }>, searchParams: Promise<{ page?: string }> }) {
-    const [tag, slug] = (await params).tag
+    { params: Promise<{ tag: string[] }>, searchParams: Promise<{ page?: string }> }) {
+    const [tag, slug] = (await params)?.tag
     const { page } = await searchParams
     const pageNum = Number(page || '') || 1;
-    const categories = await fetchCategoryByTag(tag)
+    const validTag = customerMenu.find(i => i.href.startsWith('/' + tag))
+    const categories = validTag &&  (await fetchCategoryByTag(tag))
     const { items, totalPage } = await fetchProductList(tag, slug, pageNum)
     // JSON-LD structured data
     const jsonLd = {
         "@context": "https://schema.org",
         "@type": "ItemList",
-        "name": categories.find((i: any) => i.slug === slug)?.name
+        "name": categories?.find((i: any) => i.slug === slug)?.name
             || `Tất cả sản phẩm ${customerMenu.find(i => i.href === '/' + tag + '/' + slug)?.title}`,
         "itemListElement": items.map((p: any, index: number) => ({
             "@type": "ListItem",

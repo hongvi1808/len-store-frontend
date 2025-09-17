@@ -1,19 +1,37 @@
 'use client'
+import { cartApis } from "@/base/apis/cart.api";
 import { ProductModel } from "@/base/models/product.model";
+import { RootState, useAppDispatch } from "@/base/store";
 import { updateLocalCart } from "@/base/store/slices/cart-local.slice";
+import { getCountCartThunk } from "@/base/store/thunks/cart.thunk";
+import { showAlertError } from "@/base/ui/toaster";
 import { formatCurrency } from "@/base/utils/func";
 import { ButtonIconText } from "@/components/button/buton-iconText.comp";
 import { MinusIcon, PlusCircleIcon, PlusIcon, ShoppingBagIcon } from "@heroicons/react/16/solid";
 import { Box, IconButton, Stack, TextField, Typography } from "@mui/material";
+import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export function ProductAction({ data }: { data: ProductModel }) {
     const router = useRouter();
     const dispatch = useDispatch()
-    const [selectImage, setSelectImage] = useState<string>()
+      const dispatchAsync = useAppDispatch() 
+    
     const [quantity, setQuantity] = useState(1);
+      const { loggedIn, user } = useSelector((state: RootState) => state.session)
+ const { mutate } = useMutation({
+    mutationFn: cartApis.create,
+    onError: (error) => {
+      console.error('Error calling api:', error);
+      showAlertError(error.message)
+    },
+    onSuccess: (data) => {
+      dispatchAsync(getCountCartThunk())
+      
+    },
+  });
     const handleIncrease = () => {
         if (quantity < data?.stock) {
             setQuantity(quantity + 1);
@@ -28,7 +46,9 @@ export function ProductAction({ data }: { data: ProductModel }) {
 
     const onAddTocart = (e: any) => {
         e.preventDefault()
-        dispatch(updateLocalCart({
+        if (user.userId) 
+            mutate({ productId: data?.id, quantity: 1, classify: '', customerId: user.userId })
+        else dispatch(updateLocalCart({
             id: data?.id,
             classify: '',
             quantity: quantity,
@@ -37,7 +57,7 @@ export function ProductAction({ data }: { data: ProductModel }) {
     }
     const onBuyNow = (e: any) => {
         e.preventDefault()
-        router.push('/order')
+        router.push('/checkout')
     }
     return  <Stack flex={2} spacing={3}>
         <Stack direction="row" alignItems="flex-start" spacing={2}>

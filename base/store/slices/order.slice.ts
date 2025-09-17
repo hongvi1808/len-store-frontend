@@ -1,16 +1,20 @@
-import { ProductOrderModel } from "@/base/models/order.model";
+import { OrderModel, ProductOrderModel } from "@/base/models/order.model";
 import { ORDER_LOCAL_STORAGE_KEY } from "@/base/utils/constants";
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface OrderInProcessState {
     status: string;
     totalPrice: number
+    customerId: string,
     products: ProductOrderModel[],
+    orderCreateInfo?: OrderModel
 }
 const initialState: OrderInProcessState = {
     status: 'Empty',
     totalPrice: 0,
+    customerId: '',
     products: [],
+    orderCreateInfo: undefined
 
 
 }
@@ -22,6 +26,7 @@ export const orderSlice = createSlice({
         goToOrder: (state, action) => {
             state.status = 'GoToOrder'
             state.totalPrice = action.payload.totalPrice
+            state.customerId = action.payload.customerId || ''
             state.products = action.payload.products
         },
         updateProductOrder: (state, {payload} : {payload: ProductOrderModel}) => {
@@ -39,8 +44,18 @@ export const orderSlice = createSlice({
 
             else state.status = payload
         },
+        clearOrder: (state) => {
+            state = initialState
+        },
+        switchLocalToUser: (state, action) => {
+            state.customerId = action.payload
+        },
+        pushInfoCreateOrderLocal: (state, action) => {
+            state.orderCreateInfo = action.payload
+        },
     }
 })
 
-export const { goToOrder, updateStatusOrder,updateTotalPriceOrder, updateProductOrder } = orderSlice.actions
+export const { goToOrder, updateStatusOrder,updateTotalPriceOrder,
+     updateProductOrder, clearOrder, switchLocalToUser, pushInfoCreateOrderLocal } = orderSlice.actions
 export default orderSlice.reducer 

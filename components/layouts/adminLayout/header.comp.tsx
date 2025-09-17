@@ -71,11 +71,11 @@ export default function Header({
       dispatch(clearSession())
     }
   });
-  React.useEffect(() => {
-    if (loggedIn && user.userId) {
-      dispatchAsync(getUserSessionThunk(user.userId))
-    }
-  }, [loggedIn])
+  // React.useEffect(() => {
+  //   if (loggedIn && user.userId) {
+  //     dispatchAsync(getUserSessionThunk(user.userId))
+  //   }
+  // }, [loggedIn])
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -156,7 +156,7 @@ export default function Header({
           </Stack>
           <Stack direction="row" alignItems="center">
             <Tooltip title="Open menu">
-              <IconButton onClick={handleMenu} size='large' sx={{ p: 0 }}>
+              <IconButton onClick={handleMenu} size='large' sx={{ p: 0, border: 0, bgcolor: 'transparent' }}>
                 <Avatar
                   alt={'example'}
                   src=""

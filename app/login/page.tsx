@@ -3,6 +3,8 @@ import { ButtonBase } from "@/components/button/button-base.comp";
 import NextLink from "next/link";
 import { DevicePhoneMobileIcon, EnvelopeIcon } from "@heroicons/react/16/solid";
 import { ButtonBack } from "@/components/button/button-back.comp";
+import { CustomerLoginForm } from "./login-form.comp";
+import { brand } from "@/base/ui/themePrimitive";
 
 export default function Login() {
   return (
@@ -18,42 +20,18 @@ export default function Login() {
           {'Log in'}
         </Typography>
       </Box>
-      {/* <HomeLoginForm /> */}
-      <Divider>
-        <Typography sx={{ color: 'text.secondary' }}>or</Typography>
-      </Divider>
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-        <ButtonBase component={NextLink}
-          fullWidth
-          href="/login/phone"
-          variant="outlined"
-          children={<Stack spacing={2} direction={'row'} >
-            <Icon sx={{ justifyContent: 'center', alignContent: 'center' }} >
-              <DevicePhoneMobileIcon  color="primary" />
-            </Icon>
-            {'Log in with Phone Number'}
-          </Stack>} />
-        <ButtonBase component={NextLink}
-          href="/login/email"
-          fullWidth
-          variant="outlined"
-          children={<Stack spacing={2} direction={'row'} >
-            <Icon sx={{ justifyContent: 'center', alignContent: 'center' }} >
-              <EnvelopeIcon  color="primary" />
-            </Icon>
-            {'Log in with Email'}
-          </Stack>} />
+        <CustomerLoginForm/>
+        
         <Typography sx={{ textAlign: 'center' }}>
-          {"Don't you have an account? "}
+          {"Bạn chưa có tài khoản? "}
           <Link
             href="/register"
             variant="body2"
-            sx={{ alignSelf: 'center' }}
+            sx={{ alignSelf: 'center', ml: 1, color: brand[500], textDecoration: 'underline' }}
           >
-            {'Sign up'}
+            {'Đăng ký'}
           </Link>
         </Typography>
-      </Box>
     </Stack>
   )
 }

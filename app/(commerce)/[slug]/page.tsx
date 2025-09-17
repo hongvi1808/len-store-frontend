@@ -9,7 +9,8 @@ import { ProductAction } from "./product-action.comp";
 type Props = { params: { slug: string } };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const product = await fetchDetailProduct(params?.slug);
+  const param = await params;
+  const product = await fetchDetailProduct(param?.slug);
 
   return {
     title: `${product.name} | LenStore`,
@@ -61,7 +62,7 @@ export default async function DetailProductPage({ params }: { params: Promise<an
               "reviewCount": product.reviewCount,
             },
       }
-  return <Stack padding={5} spacing={5} direction={'row'} justifyContent={'space-between'}>
+  return <Stack paddingY={5} direction={'row'} justifyContent={'space-between'}>
      <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

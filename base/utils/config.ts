@@ -7,3 +7,12 @@ export const customerMenu = [
     // { title: 'Khuyến mãi', href: '/promotion/all', despcription: 'Sản phẩm ưu đãi hấp dẫn' },
     { title: 'Bổ sung', href: '/other/all', despcription: 'Các mặt hàng khác' },
 ]
+
+export enum OrderStatus {
+    Pending = 'Pending',
+  Paid = 'Paid',
+  Shipping = 'Shipping',
+  Shipped = 'Shipped',
+  Completed = 'Completed',
+  Cancelled = 'Cancelled',
+}

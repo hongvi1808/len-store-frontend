@@ -1,6 +1,5 @@
 import { userApis } from '@/base/apis/user.api';
 import { UserModel } from '@/base/models/user.model';
-import { showAlertError } from '@/base/ui/toaster';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 

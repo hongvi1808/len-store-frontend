@@ -18,12 +18,13 @@ import { ProductModel } from "@/base/models/product.model";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/base/store";
+import { RootState, useAppDispatch } from "@/base/store";
 import { updateLocalCart } from "@/base/store/slices/cart-local.slice";
 import { useMutation } from "@tanstack/react-query";
 import { cartApis } from "@/base/apis/cart.api";
 import { showAlertError } from "@/base/ui/toaster";
 import { goToOrder } from "@/base/store/slices/order.slice";
+import { getCountCartThunk } from "@/base/store/thunks/cart.thunk";
 
 
 export type ProductCardProps = {
@@ -35,13 +36,18 @@ export function ProductCard({
   product, parentWidth
 }: ProductCardProps) {
   const router = useRouter()
-  const dispatch = useDispatch()
-  const { loggedIn } = useSelector((state: RootState) => state.session)
+  const dispatch = useDispatch() 
+  const dispatchAsync = useAppDispatch() 
+  const { loggedIn, user } = useSelector((state: RootState) => state.session)
   const { mutate, isPending } = useMutation({
     mutationFn: cartApis.create,
     onError: (error) => {
       console.error('Error calling api:', error);
       showAlertError(error.message)
+    },
+    onSuccess: (data) => {
+      dispatchAsync(getCountCartThunk())
+      
     },
   });
   const { name, price, images, slug, id } = product;
@@ -50,7 +56,7 @@ export function ProductCard({
     e.preventDefault()
     if (loggedIn) {
       // authen thi viet vao call api
-      mutate({ product, quantity: 1, classify: '' })
+      mutate({ productId: id, quantity: 1, classify: '', customerId: user.userId })
     }
     else {
       dispatch(updateLocalCart({ id: product.id, product, quantity: 1, classify: '' }))
@@ -62,7 +68,7 @@ export function ProductCard({
   const onBuyNow = (e: any) => {
     e.preventDefault()
     dispatch(goToOrder([{ id, image: images?.[0], name, price, quantity: 1, classify: '' }]))
-    router.push('/router')
+    router.push('/checkout')
     console.log('onBuyNow', product)
   }
   const getWidthCard = (col: number) => {

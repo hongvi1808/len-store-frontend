@@ -9,7 +9,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 const persistConfig = {
     key: 'root',
     storage,
-    whitelist: [SESSION_LOCAL_STORAGE_KEY, CART_LOCAL_STORAGE_KEY, ORDER_LOCAL_STORAGE_KEY],
+    whitelist: [SESSION_LOCAL_STORAGE_KEY, CART_LOCAL_STORAGE_KEY, ORDER_LOCAL_STORAGE_KEY, 'user'],
     blacklist: []
     
 }
