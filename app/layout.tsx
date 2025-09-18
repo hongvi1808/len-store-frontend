@@ -24,7 +24,7 @@ export default function RootLayout({
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
-                <GoogleProviders>
+                {/* <GoogleProviders> */}
 
                     <ReduxProvider>
                         <ReactQueryProvider>
@@ -33,7 +33,7 @@ export default function RootLayout({
                             </StyleRoot>
                         </ReactQueryProvider>
                     </ReduxProvider>
-                </GoogleProviders>
+                {/* </GoogleProviders> */}
 
             </body>
         </html>
