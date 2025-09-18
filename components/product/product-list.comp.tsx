@@ -19,7 +19,7 @@ export function ProductList({ items, totalPage }: ProductListProps) {
         if (!ref.current) return;
 
         const observer = new ResizeObserver((entries) => {
-            for (let entry of entries) {
+            for (const entry of entries) {
                 setWidth(entry.contentRect.width);
             }
         });
