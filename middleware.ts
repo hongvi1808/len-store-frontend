@@ -26,7 +26,6 @@ export function middleware(req: NextRequest) {
   return NextResponse.next();
 }
 
-// Định nghĩa matcher đúng cách
 export const config = {
   matcher: ["/admin/login", "/admin/:path*", "/login", '/register'],
 };
