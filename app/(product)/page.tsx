@@ -3,7 +3,6 @@ import HeroBanner from "@/components/home/hero-banner.comp";
 import { ServiceSection } from "@/components/home/service-section.comp";
 import { DividerLineSection } from "@/components/home/divider-section.comp";
 import { CategoryBubbleSection } from "@/components/home/category-section.comp";
-import { ContactForm } from "@/components/home/contact-form.comp";
 import { NewItemsSection } from "@/components/home/new-items.comp";
 import { HotItemSection } from "@/components/home/hot-item.comp";
 import { Stack } from "@mui/material";
