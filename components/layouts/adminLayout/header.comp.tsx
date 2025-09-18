@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { clearSession } from '@/base/store/slices/session.slice';
 import { RootState, useAppDispatch, useAppSelector } from '@/base/store';
 import { getUserSessionThunk } from '@/base/store/thunks/user.thunk';
+import { clearUser } from '@/base/store/slices/user.slice';
 
 const AppBar = styled(MuiAppBar)(({ theme }) => ({
   borderWidth: 0,
@@ -69,6 +70,7 @@ export default function Header({
     onSuccess: (data) => {
       if (data)
         dispatch(clearSession())
+        dispatch(clearUser())
       router.push('/admin/login')
     }
   });
