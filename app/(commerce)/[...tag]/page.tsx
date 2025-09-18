@@ -17,10 +17,10 @@ async function fetchCategoryByTag(tag: string) {
 async function fetchProductList(tag: string, slug: string, pageNumber: number) {
     try {
         if (slug === 'all') {
-            const data = await productApis.getListByTag(tag, { page: pageNumber - 1, limit: 10 })
+            const data = await productApis.getListByTag(tag, { page: pageNumber - 1, limit: 12 })
             return data
         }
-        return (await productApis.getListBySlugCategory(slug, { page: pageNumber - 1, limit: 10 }))
+        return (await productApis.getListBySlugCategory(slug, { page: pageNumber - 1, limit: 12 }))
     } catch (error) {
         throw error
     }

@@ -105,7 +105,13 @@ export function ProductCard({
 
       <CardContent sx={{ py: 1 }}>
         <Stack spacing={0.5}>
-          <Typography variant="body1" fontWeight={500}>
+          <Typography variant="body1" fontWeight={500}  gutterBottom
+          sx={{
+            display: "-webkit-box",
+            WebkitLineClamp: 2, // số dòng muốn hiển thị
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
+          }}>
             {name}
           </Typography>
 
