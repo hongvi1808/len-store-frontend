@@ -19,10 +19,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-interface CartTableProps {
-}
-
-export function CartTableComp(props: CartTableProps) {
+export function CartTableComp() {
     const queryClient = useQueryClient();
     const router = useRouter()
     const dispatchAsyn = useAppDispatch()
