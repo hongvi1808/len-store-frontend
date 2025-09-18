@@ -25,6 +25,8 @@ import { authApis } from '@/base/apis/auth.api';
 import { showAlertError } from '@/base/ui/toaster';
 import { clearSession } from '@/base/store/slices/session.slice';
 import Link from 'next/link';
+import { getCountCartThunk } from '@/base/store/thunks/cart.thunk';
+import { formatPhone } from '@/base/utils/func';
 
 const AppBar = styled(MuiAppBar)(({ theme }) => ({
     borderWidth: 0,
@@ -68,7 +70,7 @@ export const StyledToolbar = styled(Toolbar)(({ theme }) => ({
         : alpha(theme.palette.background.default, 0.4),
     boxShadow: (theme.vars || theme).shadows[1],
     padding: '8px 12px',
-    
+
 }));
 function ElevationScroll({ children }: { children: React.ReactElement }) {
     const trigger = useScrollTrigger({
@@ -93,18 +95,18 @@ export default function Appbar(props: AppbarProps) {
     const { loggedIn, user } = useSelector((state: RootState) => state.session)
     const { loading, item: userInfo } = useAppSelector((state: RootState) => state.user)
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const { count } = useAppSelector((state: RootState) => state.cartUser)
     const { products: cartItems } = useSelector((state: RootState) => state.cartLocal)
     const { products: orderItems, status } = useSelector((state: RootState) => state.order)
 
     const [open, setOpen] = React.useState(false);
-    React.useEffect(() => {
-        if (loggedIn && user.userId) {
-            dispatchAsync(getUserSessionThunk(user.userId))
-        }
-    }, [loggedIn])
     const toggleDrawer = (newOpen: boolean) => () => {
         setOpen(newOpen);
     };
+    React.useEffect(()=> {
+        if (user.userId)
+        dispatchAsync(getCountCartThunk())
+    }, [user.userId])
 
     const { mutate, isPending } = useMutation({
         mutationFn: authApis.logout,
@@ -113,10 +115,10 @@ export default function Appbar(props: AppbarProps) {
             showAlertError(error.message)
 
         },
-         onSuccess: (data) => {
-              if (data)
-              dispatch(clearSession())
-            }
+        onSuccess: (data) => {
+            if (data)
+                dispatch(clearSession())
+        }
     });
     const logout = () => {
         mutate()
@@ -131,7 +133,7 @@ export default function Appbar(props: AppbarProps) {
     };
     const getBadgeContent = (href: string) => {
         switch (href) {
-            case '/cart': return cartItems?.length
+            case '/cart': return loggedIn ? count: cartItems?.length
             case '/order': {
                 if (status === 'Pending')
                     return orderItems?.length
@@ -178,8 +180,8 @@ export default function Appbar(props: AppbarProps) {
                             {/* right */}
                             <Box sx={{ display: { xs: 'none', md: 'flex' }, columnGap: 0.5 }}>
                                 {props.menu?.map((item, index) => (
-                                    <IconButton 
-                                    key={index}
+                                    <IconButton
+                                        key={index}
                                         size='small'
                                         onClick={() => router.push(item.href)} sx={{
                                             border: 'none',
@@ -196,22 +198,22 @@ export default function Appbar(props: AppbarProps) {
                                 ))}
                                 {menus?.map((item, index) => (
                                     <IconButton key={index}
-                                            onClick={() => router.push(item.href)} sx={{
-                                                border: 'none',
-                                                borderRadius: 2,
-                                                ml: 1,
-                                                bgcolor: 'transparent',
-                                                transition: "transform 120ms ease",
-                                                "&:hover": { transform: "scale(1.05)" },
-                                            }}>
-                                                <Tooltip key={index} title={item.title} placement="bottom">
+                                        onClick={() => router.push(item.href)} sx={{
+                                            border: 'none',
+                                            borderRadius: 2,
+                                            ml: 1,
+                                            bgcolor: 'transparent',
+                                            transition: "transform 120ms ease",
+                                            "&:hover": { transform: "scale(1.05)" },
+                                        }}>
+                                        <Tooltip key={index} title={item.title} placement="bottom">
                                             <Badge badgeContent={getBadgeContent(item.href)} invisible={!item.badge} color="error">
                                                 <Typography variant='body2' color={pathname === item.href ? 'primary' : 'textPrimary'}>
                                                     {pathname === item.href ? item.solidIcon : item.outlineIcon}
                                                 </Typography>
                                             </Badge>
-                                    </Tooltip>
-                                        </IconButton>
+                                        </Tooltip>
+                                    </IconButton>
                                 ))}
                                 {/* <Box
                                 sx={{
@@ -224,9 +226,9 @@ export default function Appbar(props: AppbarProps) {
                                 <TextField placeholder='Tìm kiếm...' />
                             </Box> */}
                                 {loggedIn ?
-                                    <Stack direction="row" alignItems="center" display={{ xs: 'none', md: 'flex' }}>
-                                        <Tooltip title="Open menu">
-                                            <IconButton onClick={handleMenu} size='large' sx={{ p: 0 }}>
+                                    <Stack direction="row" alignItems="center" ml={1} display={{ xs: 'none', md: 'flex', }}>
+                                        <Tooltip title={userInfo.fullName}>
+                                            <IconButton onClick={handleMenu} size='large' sx={{ p: 0, border: 0, bgcolor: 'transparent' }}>
                                                 <Avatar
                                                     alt={'example'}
                                                     src=""
@@ -256,11 +258,11 @@ export default function Appbar(props: AppbarProps) {
                                                         <Avatar sizes='small' >A</Avatar>
                                                         <Stack >
                                                             <Typography variant='body1'>{userInfo.fullName}</Typography>
-                                                            <Typography variant='caption' color='textSecondary'>{userInfo.email}</Typography>
+                                                            <Typography variant='caption' color='textSecondary'>{userInfo?.email || formatPhone(userInfo.phoneNumber || '')}</Typography>
                                                         </Stack>
 
                                                     </Stack>
-                                                    <MenuItem onClick={() => router.push('/admin/profile')}>
+                                                    <MenuItem onClick={() => router.push('/profile')}>
                                                         <ButtonIconText buttonProps={{ variant: 'text', color: 'inherit' }} iconComp={<UserIcon />} title='Profile' />
                                                     </MenuItem>
                                                     <MenuItem onClick={logout}>

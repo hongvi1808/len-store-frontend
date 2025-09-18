@@ -3,6 +3,7 @@ import type { NextRequest } from "next/server";
 import { ROLE_ADMIN, ROLE_CUSTOMER } from "./base/utils/constants";
 
 export function middleware(req: NextRequest) {
+  
   const accessToken = req.cookies.get("access-token")?.value;
   const role = req.cookies.get("role")?.value;
   // role admin
@@ -24,3 +25,8 @@ export function middleware(req: NextRequest) {
 
   return NextResponse.next();
 }
+
+// Định nghĩa matcher đúng cách
+export const config = {
+  matcher: ["/admin/login", "/admin/:path*", "/login", '/register'],
+};

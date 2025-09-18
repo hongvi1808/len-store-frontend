@@ -428,7 +428,7 @@ export const inputsCustomizations: Components<Theme> = {
     styleOverrides: {
       input: ({ ownerState }) => ({
           ...(ownerState.size === "small" && {
-            padding: "4px 8px", // padding cho size small
+            padding: "0px", // padding cho size small
           }),
           ...(ownerState.size === "medium" && {
             padding: "6px 12px", // padding cho size medium

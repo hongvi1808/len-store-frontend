@@ -1,82 +1,59 @@
 'use client'
-import { categoryApis } from "@/base/apis/category.api";
 import { orderApis } from "@/base/apis/order.api";
-import { productApis } from "@/base/apis/product.api";
 import { ListParams } from "@/base/models/common.model";
-import { ProductModel } from "@/base/models/product.model";
 import { showAlertError, showAlertSuccess } from "@/base/ui/toaster";
-import { validRequire } from "@/base/utils/func";
+import { formatPhone } from "@/base/utils/func";
 import { AutocompleteBase } from "@/components/autocomplete/autocomplete-base.comp";
 import { ButtonIconText } from "@/components/button/buton-iconText.comp";
 import { ButtonIcon } from "@/components/button/button-icon.comp";
 import TableBase from "@/components/table/table-base.comp";
-import { TextFiledControlBase } from "@/components/textfield/textfield.comp";
-import { ArrowRightStartOnRectangleIcon, PencilSquareIcon, PlusIcon, QueueListIcon, TrashIcon, XMarkIcon } from "@heroicons/react/16/solid";
-import { Box, Chip, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Stack } from "@mui/material";
+import { ArrowRightStartOnRectangleIcon, EyeIcon, PencilSquareIcon, PlusIcon, QueueListIcon, XMarkIcon } from "@heroicons/react/16/solid";
+import { Box, Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, Icon, Popover, Stack, Typography } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { ProductListByOrderTable } from "./product-by-order.comp";
 import { OrderModel } from "@/base/models/order.model";
-import { userApis } from "@/base/apis/user.api";
+import { orderStatusText } from "@/base/utils/constants";
 
 export function OrderListForm() {
     const queryClient = useQueryClient();
-    const [paginationModel, setPaginationModel] = useState<ListParams>({ page: 1, limit: 10 })
+    const [paginationModel, setPaginationModel] = useState<ListParams>({ page: 0, limit: 10 })
     const [item, setItem] = useState<OrderModel | null>(null);
     const [openDiag, setOpenDiag] = useState(false);
     const [openProductDiag, setOpenProductDiag] = useState(false);
+    const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
-    const [selectedCategory, setSelectedCategory] = useState<string[]>([])
     // QUERY
     const { isLoading, data } = useQuery({
         queryKey: ['admin-order', paginationModel],
         queryFn: async () => orderApis.getList(paginationModel),
     });
-    const { isLoading: productLoading, data: products } = useQuery({
-        queryKey: ['admin-product-order-select', { page: 0, limit: 100 }],
-        queryFn: async () => productApis.getList({ page: 0, limit: 100 }),
-    });
-    const { isLoading: userLoading, data: users } = useQuery({
-        queryKey: ['admin-user-order-select', { page: 0, limit: 100 }],
-        queryFn: async () => userApis.getListCustomer({ page: 0, limit: 100 }),
-    });
     // MUTATE
-    const { mutate: removeMutate, isPending: removePending } = useMutation({
-        mutationFn: productApis.remove,
-        onError: (error) => {
-            console.error('Error calling api:', error);
-            showAlertError(error.message)
-        },
-        onSuccess: (data) => {
-            showAlertSuccess('Deleted a product!')
-            queryClient.invalidateQueries({ queryKey: ['admin-product', paginationModel] });
-        },
-    });
     const { mutate: createMutate, isPending: createPending } = useMutation({
-        mutationFn: productApis.create,
+        mutationFn: orderApis.create,
         onError: (error) => {
             console.error('Error calling api:', error);
             showAlertError(error.message)
 
         },
         onSuccess: (data) => {
-            showAlertSuccess('Added a product!')
+            showAlertSuccess('Added a order!')
             onToggleDiaglog(null)
-            queryClient.invalidateQueries({ queryKey: ['admin-product', paginationModel] });
+            queryClient.invalidateQueries({ queryKey: ['admin-order', paginationModel] });
         },
     });
     const { mutate: updateMutate, isPending: updatePending } = useMutation({
-        mutationFn: productApis.update,
+        mutationFn: orderApis.update,
         onError: (error) => {
             console.error('Error calling api:', error);
             showAlertError(error.message)
 
         },
         onSuccess: (data) => {
-            showAlertSuccess('Updated a product!')
+            showAlertSuccess('Updated a order!')
             onToggleDiaglog(null)
-            queryClient.invalidateQueries({ queryKey: ['admin-product', paginationModel] });
+            queryClient.invalidateQueries({ queryKey: ['admin-order', paginationModel] });
         },
     });
 
@@ -84,8 +61,8 @@ export function OrderListForm() {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
         const data = Object.fromEntries(formData.entries())
-        // if (item) updateMutate({ ...data, id: item.id, categoryIds: selectedCategory })
-        // else createMutate({ ...data, categoryIds: selectedCategory })
+        if (item) updateMutate({...data, id: item.id})
+        else createMutate({data})
     }
     const onToggleDiaglog = (selectedItem: OrderModel | null) => {
         setItem(selectedItem)
@@ -101,19 +78,46 @@ export function OrderListForm() {
         },
         { field: 'code', headerName: 'Code', flex: 1 },
         {
-            field: 'customer', headerName: 'Customer', flex: 1, renderCell: (params) =>
-                (params.row?.customerId ? (users?.items || [])?.find((i: any) => i.id === params.row.customerId) : 'Retail')
+            field: 'customerInfo', headerName: 'Customer', flex: 1, renderCell: (params) =>
+            (<Box>
+                <Button aria-describedby={params.row.id} variant="text"
+                    onClick={(event) => { setItem(params.row); setAnchorEl(event.currentTarget) }}
+                    endIcon={<Icon><EyeIcon /></Icon>}
+                >
+                    {params.row.customerInfo.name}
+                </Button>
+                <Popover
+                    id={params.row.id}
+                    open={item?.id === params.row.id && Boolean(anchorEl)}
+                    anchorEl={anchorEl}
+                    onClose={() => { setItem(null); setAnchorEl(null) }}
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}
+                >
+                    <Stack spacing={2} p={2}>
+                        <Typography >{`Name: ${params.row.customerInfo.name}`}</Typography>
+                        <Typography >{`Phone: ${formatPhone(params.row.customerInfo.phoneNumber)}`}</Typography>
+                        <Typography >{`Email: ${params.row.customerInfo.email}`}</Typography>
+                        <Typography >{`Address: ${params.row.customerInfo.address}`}</Typography>
+
+                    </Stack>
+                </Popover>
+            </Box>)
         },
         { field: 'totalPrice', headerName: 'Total', flex: 1 },
         { field: 'createdAt', headerName: 'Created At', flex: 1 },
-        { field: 'status', headerName: 'Status', flex: 1, renderCell: (params) => (
+        {
+            field: 'status', headerName: 'Status', flex: 1, renderCell: (params) => (
                 <Chip
                     label={params.row.status}
                     color={params.row.status === 'Completed' ? "success" : "warning"}
                     size="medium"
                     variant={params.row.status === 'Completed' ? "filled" : "outlined"}
                 />
-            ), },
+            ),
+        },
         {
             field: "action",
             headerName: "", flex: 1,
@@ -125,9 +129,9 @@ export function OrderListForm() {
                     <ButtonIcon iconComp={<QueueListIcon />}
                         buttonProps={{ color: 'secondary' }}
                         onClick={() => onToggleProductListDiaglog(params.row)} />
-                    <ButtonIcon iconComp={<TrashIcon />}
+                    {/* <ButtonIcon iconComp={<TrashIcon />}
                         buttonProps={{ color: 'error', loading: removePending }}
-                        onClick={() => removeMutate(params.row.id)} />
+                        onClick={() => removeMutate(params.row.id)} /> */}
 
                 </Box>
             ),
@@ -161,43 +165,16 @@ export function OrderListForm() {
                         onSubmit={handleSubmit}
                         sx={{ display: 'flex', flexDirection: 'column', gap: 2, }}
                     >
-                        {/* <TextFiledControlBase
-                                    name='customerId'
-                                    label="Name*"
-                                    inputProps={{ required: true, defaultValue: item?.name }}
-                                    getErrorMessage={validRequire}
-                                />
-                                <AutocompleteBase<any, true>
-                                    multiple
-                                    // required
-                                    options={categories?.items || []}
-                                    label="Category"
-                                    default={categories?.items.filter((i: any) => item?.categoryIds?.includes(i.id))}
-                                    name="categoryIds"
-                                    loading={categoryLoading}
-                                    getOptionLabel={(op) => op.name}
-                                    values={(value) => setSelectedCategory(value?.map((i: any) => i.id) || [])}
-                                    renderInput={(param) => <></>}
-                                />
-
-                                <TextFiledControlBase
-                                    name='stock'
-                                    label="Stock*"
-                                    getErrorMessage={validRequire}
-                                    inputProps={{ required: true, type: 'number',defaultValue: item?.stock  }}
-                                />
-                                <TextFiledControlBase
-                                    name='price'
-                                    label="Price*"
-                                    getErrorMessage={validRequire}
-                                    inputProps={{ required: true, type: 'number', defaultValue: item?.price }}
-                                />
-                                <TextFiledControlBase
-                                    name='description'
-                                    label="Description*"
-                                    getErrorMessage={validRequire}
-                                    inputProps={{multiline: true, rows: 4, required: true,defaultValue: item?.description}}
-                                /> */}
+                       <AutocompleteBase<any, false>
+                                                   label="Status"
+                                                   default={item?.status}
+                                                   name="status"
+                                                   selectProps={{
+                                                       options: [...orderStatusText].map(([key, value]) => (key)),
+                                                       renderInput: (param) => <></>,
+                                                    //    defaultValue: 'other'
+                                                   }}
+                                               />
                     </Box>
                 </DialogContent>
                 <DialogActions sx={{ margin: 2 }} >

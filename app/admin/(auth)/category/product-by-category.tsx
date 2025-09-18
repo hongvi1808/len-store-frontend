@@ -1,17 +1,12 @@
 'use client'
-import { categoryApis } from "@/base/apis/category.api";
 import { productApis } from "@/base/apis/product.api";
 import { ListParams } from "@/base/models/common.model";
-import { ProductModel } from "@/base/models/product.model";
 import { showAlertError, showAlertSuccess } from "@/base/ui/toaster";
-import { validRequire } from "@/base/utils/func";
-import { AutocompleteBase } from "@/components/autocomplete/autocomplete-base.comp";
 import { ButtonIconText } from "@/components/button/buton-iconText.comp";
 import { ButtonIcon } from "@/components/button/button-icon.comp";
 import TableBase from "@/components/table/table-base.comp";
-import { TextFiledControlBase } from "@/components/textfield/textfield.comp";
-import { ArrowRightStartOnRectangleIcon, PencilSquareIcon, PlusIcon, TrashIcon, XMarkIcon } from "@heroicons/react/16/solid";
-import { Box, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Stack } from "@mui/material";
+import { TrashIcon, XMarkIcon } from "@heroicons/react/16/solid";
+import { Box, Dialog, DialogActions, DialogContent, DialogTitle, } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";

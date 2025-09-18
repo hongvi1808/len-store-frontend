@@ -3,6 +3,7 @@ import sessionReducer from './session.slice'
 import orderReducer from './order.slice'
 import cartLocalReducer from './cart-local.slice'
 import userReducer from './user.slice'
+import cartUserReducer from './cart-user.slice'
 
 
 export const rootReducer = combineReducers({
@@ -10,5 +11,6 @@ export const rootReducer = combineReducers({
     user: userReducer,
     order: orderReducer,
     cartLocal: cartLocalReducer,
+    cartUser: cartUserReducer,
 
 })

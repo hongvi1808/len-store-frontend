@@ -2,7 +2,6 @@ import { ListData } from "@/base/models/common.model";
 import { SessionModel } from "@/base/models/session.model";
 import { ROLE_CUSTOMER, SESSION_LOCAL_STORAGE_KEY } from "@/base/utils/constants";
 import { createSlice } from "@reduxjs/toolkit";
-import { getUserSessionThunk } from "../thunks/user.thunk";
 
 const emptySession =  {accessToken: '', expiredAt: 0, userId: '', role:  ROLE_CUSTOMER}
 export interface SessionState {

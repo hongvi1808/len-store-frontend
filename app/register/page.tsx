@@ -1,8 +1,7 @@
-import { Box,  Divider, Icon, Link, Stack, Typography } from "@mui/material";
-import { ButtonBase } from "@/components/button/button-base.comp";
-import NextLink from "next/link";
-import { DevicePhoneMobileIcon, EnvelopeIcon } from "@heroicons/react/16/solid";
+import { Box,  Divider, Link, Stack, Typography } from "@mui/material";
+import { CustomerRegisterForm } from "./register-form.comp";
 import { ButtonBack } from "@/components/button/button-back.comp";
+import { brand } from "@/base/ui/themePrimitive";
 
 export default function Register() {
   return (
@@ -15,42 +14,22 @@ export default function Register() {
           textAlign={'center'}
           sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
         >
-          {'Log in'}
+          {'Đăng ký tài khoản'}
         </Typography>
+        <CustomerRegisterForm/>
       </Box>
-      {/* <HomeLoginForm /> */}
       <Divider>
         <Typography sx={{ color: 'text.secondary' }}>or</Typography>
       </Divider>
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-        <ButtonBase component={NextLink}
-          fullWidth
-          href="/login/phone"
-          variant="outlined"
-          children={<Stack spacing={2} direction={'row'} >
-            <Icon sx={{ justifyContent: 'center', alignContent: 'center' }} >
-              <DevicePhoneMobileIcon  color="primary" />
-            </Icon>
-            {'Log in with Phone Number'}
-          </Stack>} />
-        <ButtonBase component={NextLink}
-          href="/login/email"
-          fullWidth
-          variant="outlined"
-          children={<Stack spacing={2} direction={'row'} >
-            <Icon sx={{ justifyContent: 'center', alignContent: 'center' }} >
-              <EnvelopeIcon  color="primary" />
-            </Icon>
-            {'Log in with Email'}
-          </Stack>} />
         <Typography sx={{ textAlign: 'center' }}>
-          {"Don't you have an account? "}
+          {"Bạn đã có tài khoản?"}
           <Link
-            href="phone/login"
+            href="/login"
             variant="body2"
-            sx={{ alignSelf: 'center' }}
+            sx={{ alignSelf: 'center', ml: 1, color: brand[500], textDecoration: 'underline' }}
           >
-            {'Sign up'}
+            {'Đăng nhập'}
           </Link>
         </Typography>
       </Box>

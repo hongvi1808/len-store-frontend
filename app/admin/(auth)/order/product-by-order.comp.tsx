@@ -1,20 +1,13 @@
 'use client'
-import { categoryApis } from "@/base/apis/category.api";
 import { orderApis } from "@/base/apis/order.api";
-import { productApis } from "@/base/apis/product.api";
 import { ListParams } from "@/base/models/common.model";
-import { ProductModel } from "@/base/models/product.model";
-import { showAlertError, showAlertSuccess } from "@/base/ui/toaster";
-import { validRequire } from "@/base/utils/func";
-import { AutocompleteBase } from "@/components/autocomplete/autocomplete-base.comp";
+import { formatCurrency } from "@/base/utils/func";
 import { ButtonIconText } from "@/components/button/buton-iconText.comp";
-import { ButtonIcon } from "@/components/button/button-icon.comp";
 import TableBase from "@/components/table/table-base.comp";
-import { TextFiledControlBase } from "@/components/textfield/textfield.comp";
-import { ArrowRightStartOnRectangleIcon, PencilSquareIcon, PlusIcon, TrashIcon, XMarkIcon } from "@heroicons/react/16/solid";
-import { Box, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Stack } from "@mui/material";
+import { XMarkIcon } from "@heroicons/react/16/solid";
+import { Box, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
 interface ProductListByOrderProps {
@@ -29,7 +22,7 @@ export function ProductListByOrderTable(props: ProductListByOrderProps) {
     // QUERY
     const { isLoading, data } = useQuery({
         queryKey: ['admin-product-by-order', paginationModel, props.orderId],
-        queryFn: async () => orderApis.getListOrderedProduct(props.orderId,paginationModel),
+        queryFn: async () => orderApis.getListOrderedProduct(props.orderId),
         enabled: !!props.orderId
     });
 
@@ -37,9 +30,11 @@ export function ProductListByOrderTable(props: ProductListByOrderProps) {
         {
             field: 'order', headerName: 'Order', renderCell: (params) => (params.api.getRowIndexRelativeToVisibleRows(params.id) + 1)
         },
-        { field: 'name', headerName: 'Name', flex: 1 },
+        { field: 'name', headerName: 'Name', flex: 3 },
         { field: 'quantity', headerName: 'Quantity', flex: 1 },
-        { field: 'price', headerName: 'Price', flex: 1 },
+        { field: 'price', headerName: 'Price', flex: 1, renderCell(params) {
+            return <Box>{formatCurrency(params.row.price)}</Box>
+        }, },
         // {
         //     field: "action",
         //     headerName: "", flex: 1,

@@ -1,6 +1,8 @@
 'use client'
 import { authApis } from "@/base/apis/auth.api";
+import { useAppDispatch } from "@/base/store";
 import { setSession } from "@/base/store/slices/session.slice";
+import { getUserSessionThunk } from "@/base/store/thunks/user.thunk";
 import { showAlertError } from "@/base/ui/toaster";
 import { validRequire, validUsername } from "@/base/utils/func";
 import { TextFiledControlBase } from "@/components/textfield/textfield.comp"
@@ -12,6 +14,7 @@ import { useDispatch } from "react-redux";
 export function AdminLoginForm() {
     const router = useRouter()
     const dispatch  = useDispatch()
+        const dispatchAsync = useAppDispatch()
     const { mutate, isPending } = useMutation({
         mutationFn: authApis.login,
         onError: (error) => {
@@ -19,8 +22,8 @@ export function AdminLoginForm() {
             showAlertError(error.message)
         },
         onSuccess: (data) => {
-            console.log('dataa', data)
             dispatch(setSession(data))
+            dispatchAsync(getUserSessionThunk(data.userId))
             router.push('/admin/dashboard')
 
         },

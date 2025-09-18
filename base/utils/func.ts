@@ -38,4 +38,28 @@ export const formatCurrency = (
     currency,
     maximumFractionDigits: currency === "VND" ? 0 : 2,
   }).format(value);
+
+  export const formatDate = (da: number | Date): string => {
+    if (!da) return ''
+    const date = new Date(da);
+    const h = date.getHours().toString().padStart(2, "0");
+    const m = date.getMinutes().toString().padStart(2, "0");
+    const d = date.getDate().toString().padStart(2, "0");
+    const mo = (date.getMonth() + 1).toString().padStart(2, "0"); // tháng tính từ 0
+    const y = date.getFullYear();
+    return `${h}:${m} ${d}-${mo}-${y}`;
+}
+
+export const formatPhone = (phone: string) => {
+    if (!phone) return ''
+    // Bỏ khoảng trắng, dấu gạch ngang nếu có
+    let cleaned = phone?.replace(/\D/g, "");
+
+    // Nếu bắt đầu bằng 84 → thay bằng 0
+    if (cleaned?.startsWith("84")) {
+        cleaned = "0" + cleaned.slice(2);
+    }
+
+    return cleaned;
+}
   
