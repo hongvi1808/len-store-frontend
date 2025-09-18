@@ -15,6 +15,7 @@ const eslintConfig = [
     rules: {
       "@typescript-eslint/no-explicit-any": "warn",
       "react/no-children-prop": "warn",
+      "@typescript-eslint/no-empty-interface": "off"
     },
     ignores: [
       "node_modules/**",
