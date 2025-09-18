@@ -3,6 +3,7 @@ import './globals.css'
 import StyleRoot from "@/base/ui/style-root";
 import ReactQueryProvider from "@/base/react-query/provider";
 import { ReduxProvider } from "@/base/store/provider";
+import { GoogleProviders } from "@/base/google-auth/provider";
 const geistSans = Geist({
     variable: "--font-geist-sans",
     subsets: ["latin"],
@@ -23,13 +24,16 @@ export default function RootLayout({
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
-                <ReduxProvider>
-                    <ReactQueryProvider>
-                        <StyleRoot>
-                            {children}
-                        </StyleRoot>
-                    </ReactQueryProvider>
-                </ReduxProvider>
+                <GoogleProviders>
+
+                    <ReduxProvider>
+                        <ReactQueryProvider>
+                            <StyleRoot>
+                                {children}
+                            </StyleRoot>
+                        </ReactQueryProvider>
+                    </ReduxProvider>
+                </GoogleProviders>
 
             </body>
         </html>

@@ -1,4 +1,4 @@
-import { Box, Container, Typography } from "@mui/material";
+import {  Container, Typography } from "@mui/material";
 import { CheckoutForm } from "./checkout-form.comp";
 
 export default function CheckoutPage() {

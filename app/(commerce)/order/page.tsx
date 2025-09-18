@@ -1,4 +1,4 @@
-import { Box, Container, Typography } from "@mui/material";
+import { Container, Typography } from "@mui/material";
 import { OrderCustomerForm } from "./order-form.comp";
 
 export default function OrderPage() {

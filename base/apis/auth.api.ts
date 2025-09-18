@@ -9,11 +9,14 @@ export const authApis = {
     register: (data: any) => {
         return apiBase.post(`${urlDefault}/register`, data);
     },
-    google: () => {
-        return apiBase.get(`${urlDefault}/google`);
+    google: (token: string) => {
+        return apiBase.get(`${urlDefault}/google`, {headers: {Authorization: `Bearer ${token}`}});
     },
-    googleCallback: () => {
-        return apiBase.get(`${urlDefault}/google/callback`);
+    googleCallback: (data: any) => {
+        return apiBase.get(`${urlDefault}/google/callback`,  {headers: {Authorization: `Bearer ${data}`}});
+    },
+    googleVerify: (data: any) => {
+        return apiBase.post(`${urlDefault}/google/verify`,  data);
     },
     logout: () => {
         return apiBase.get(`${urlDefault}/logout`, );

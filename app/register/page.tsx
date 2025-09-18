@@ -1,4 +1,4 @@
-import { Box,  Divider, Icon, Link, Stack, Typography } from "@mui/material";
+import { Box,  Divider, Link, Stack, Typography } from "@mui/material";
 import { CustomerRegisterForm } from "./register-form.comp";
 import { ButtonBack } from "@/components/button/button-back.comp";
 import { brand } from "@/base/ui/themePrimitive";

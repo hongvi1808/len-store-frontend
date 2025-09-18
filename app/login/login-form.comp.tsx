@@ -11,6 +11,7 @@ import { validPhone, validRequire } from "@/base/utils/func";
 import { ButtonBase } from "@/components/button/button-base.comp";
 import { TextFiledControlBase } from "@/components/textfield/textfield.comp"
 import { Box, Button, CardMedia, Divider, Icon, Stack, Typography } from "@mui/material"
+import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
@@ -34,6 +35,26 @@ export function CustomerLoginForm() {
 
         },
     });
+    const { mutate: google, isPending: loading } = useMutation({
+        mutationFn: authApis.googleVerify,
+        onError: (error) => {
+            console.error('Error calling api:', error);
+            showAlertError(error.message)
+        },
+        onSuccess: (data) => {
+            dispatch(setSession(data))
+            dispatchAsync(getUserSessionThunk(data.userId))
+            router.back()
+            handleSyncCart(data.userId)
+
+        },
+    });
+    const handleGoogleSuccess = (credentialResponse: CredentialResponse) => {
+        console.log('ggole', credentialResponse)
+        if (credentialResponse.credential)
+        google(credentialResponse.credential)
+        
+    }
     const handleSyncCart = (userId: string) => {
         if (!cartItems?.length) return;
         showAlertQuestion(`Bạn có muốn đồng bộ ${cartItems?.length} sản phẩm trong giỏ hàng vào tài khoản?`,
@@ -104,8 +125,12 @@ export function CustomerLoginForm() {
         <Divider>
             <Typography sx={{ color: 'text.secondary' }}>or</Typography>
         </Divider>
-        <ButtonBase
-            href="/login/email"
+        {/* <GoogleLogin useOneTap logo_alignment="center"
+  onSuccess={handleGoogleSuccess}
+  onError={() => console.log("Login Failed")}
+/> */}
+        {/* <ButtonBase
+            href="/api/google"
             fullWidth
             size="large"
             variant="outlined"
@@ -113,7 +138,6 @@ export function CustomerLoginForm() {
             <Stack direction={'row'} alignItems={'center'} spacing={2}>
 
                 <Box>
-
                     <CardMedia
                         component="img"
                         image="/images/google.png"
@@ -124,9 +148,10 @@ export function CustomerLoginForm() {
                         }}
                     />
                 </Box>
+                
                 <Typography>{'Log in with Google'}</Typography>
             </Stack>
-        </ButtonBase>
+        </ButtonBase> */}
     </Stack>
 
 }

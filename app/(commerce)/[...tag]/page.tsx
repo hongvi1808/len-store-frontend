@@ -1,4 +1,4 @@
-import { Box, Pagination, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { ButtonBase } from "@/components/button/button-base.comp";
 import Link from "next/link";
 import { ProductList } from "@/components/product/product-list.comp";

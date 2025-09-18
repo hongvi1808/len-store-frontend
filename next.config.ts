@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-   matcher: ["/admin/login", "/admin/:path*", "/login", '/register'],
+  //  matcher: ["/admin/login", "/admin/:path*", "/login", '/register'],
    async rewrites() {
     return {
       beforeFiles: [

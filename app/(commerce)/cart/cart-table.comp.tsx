@@ -14,7 +14,7 @@ import TableBase from "@/components/table/table-base.comp";
 import { MinusIcon, PlusIcon, TrashIcon } from "@heroicons/react/16/solid";
 import { Box, CardMedia, Container, IconButton, Stack, TextField, Typography } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";

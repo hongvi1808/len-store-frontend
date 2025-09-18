@@ -1,7 +1,4 @@
-import { Box,  Divider, Icon, Link, Stack, Typography } from "@mui/material";
-import { ButtonBase } from "@/components/button/button-base.comp";
-import NextLink from "next/link";
-import { DevicePhoneMobileIcon, EnvelopeIcon } from "@heroicons/react/16/solid";
+import { Box,  Link, Stack, Typography } from "@mui/material";
 import { ButtonBack } from "@/components/button/button-back.comp";
 import { CustomerLoginForm } from "./login-form.comp";
 import { brand } from "@/base/ui/themePrimitive";
