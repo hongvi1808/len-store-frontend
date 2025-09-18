@@ -6,7 +6,6 @@ export function middleware(req: NextRequest) {
   
   const accessToken = req.cookies.get("access-token")?.value;
   const role = req.cookies.get("role")?.value;
-  console.log('assces', accessToken, role)
   // role admin
   if (accessToken && role === ROLE_ADMIN && req.nextUrl.pathname === "/admin/login") {
     return NextResponse.redirect(new URL("/admin", req.url));

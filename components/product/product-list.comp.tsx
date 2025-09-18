@@ -46,7 +46,7 @@ export function ProductList({ items, totalPage }: ProductListProps) {
                 <Pagination sx={{ justifySelf: 'center', my: 5 }}
                     count={totalPage} shape="rounded"
                     color="primary"
-                    defaultPage={Number(searchParams.get('page'))}
+                    defaultPage={Number(searchParams.get('page')) || 1}
                     onChange={handleChangePage}
                 />}
 
