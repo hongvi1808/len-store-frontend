@@ -87,9 +87,9 @@ export function ProductListForm() {
         setOpenDiag(!openDiag)
     }
     const columns: GridColDef[] = [
-        {
-            field: 'order', headerName: 'Order', renderCell: (params) => (params.api.getRowIndexRelativeToVisibleRows(params.id) + 1)
-        },
+        // {
+        //     field: 'order', headerName: 'Order', renderCell: (params) => (params.api.getRowIndexRelativeToVisibleRows(params.id) + 1)
+        // },
         { field: 'name', headerName: 'Name', flex: 1 },
         { field: 'stock', headerName: 'Stock', flex: 1 },
         { field: 'price', headerName: 'Price', flex: 1 },

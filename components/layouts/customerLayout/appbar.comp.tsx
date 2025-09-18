@@ -27,6 +27,7 @@ import { clearSession } from '@/base/store/slices/session.slice';
 import Link from 'next/link';
 import { getCountCartThunk } from '@/base/store/thunks/cart.thunk';
 import { formatPhone } from '@/base/utils/func';
+import { clearUser } from '@/base/store/slices/user.slice';
 
 const AppBar = styled(MuiAppBar)(({ theme }) => ({
     borderWidth: 0,
@@ -116,8 +117,10 @@ export default function Appbar(props: AppbarProps) {
 
         },
         onSuccess: (data) => {
-            if (data)
+            if (data) {
                 dispatch(clearSession())
+                dispatch(clearUser())
+            }
         }
     });
     const logout = () => {

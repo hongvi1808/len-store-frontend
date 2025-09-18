@@ -2,7 +2,7 @@
 import { orderApis } from "@/base/apis/order.api";
 import { ListParams } from "@/base/models/common.model";
 import { showAlertError, showAlertSuccess } from "@/base/ui/toaster";
-import { formatPhone } from "@/base/utils/func";
+import { formatCurrency, formatDate, formatPhone } from "@/base/utils/func";
 import { AutocompleteBase } from "@/components/autocomplete/autocomplete-base.comp";
 import { ButtonIconText } from "@/components/button/buton-iconText.comp";
 import { ButtonIcon } from "@/components/button/button-icon.comp";
@@ -106,8 +106,12 @@ export function OrderListForm() {
                 </Popover>
             </Box>)
         },
-        { field: 'totalPrice', headerName: 'Total', flex: 1 },
-        { field: 'createdAt', headerName: 'Created At', flex: 1 },
+        { field: 'totalPrice', headerName: 'Total', flex: 1, renderCell: (params) => (
+            <Box>{formatCurrency(params.row.totalPrice)}</Box>
+        ), },
+        { field: 'createdAt', headerName: 'Created At', flex: 1, renderCell: (params) => (
+            <Box>{formatDate(params.row.createdAt)}</Box>
+        ), },
         {
             field: 'status', headerName: 'Status', flex: 1, renderCell: (params) => (
                 <Chip
