@@ -35,7 +35,7 @@ export function ProductList({ items, totalPage }: ProductListProps) {
     return (
         <Box width={'100%'} ref={ref} >
 
-            <Stack gap={2} direction={'row'} flexWrap={'wrap'} justifyContent={'flex-start'}>
+            <Stack gap={0.5} direction={'row'} flexWrap={'wrap'} justifyContent={'flex-start'}>
                 {(items || [])?.map((p: any, idx: any) => (
                     <ProductCard parentWidth={width} key={idx} product={p} />
                 ))}
@@ -43,7 +43,7 @@ export function ProductList({ items, totalPage }: ProductListProps) {
                     <Typography variant="body2">{'Hiện tại chưa có sản phẩm nào!'}</Typography>}
             </Stack>
             {totalPage > 1 &&
-                <Pagination sx={{ justifySelf: 'center', mt: 5 }}
+                <Pagination sx={{ justifySelf: 'center', my: 5 }}
                     count={totalPage} shape="rounded"
                     color="primary"
                     defaultPage={Number(searchParams.get('page'))}

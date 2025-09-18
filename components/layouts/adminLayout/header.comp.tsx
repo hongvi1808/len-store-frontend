@@ -68,7 +68,8 @@ export default function Header({
     },
     onSuccess: (data) => {
       if (data)
-      dispatch(clearSession())
+        dispatch(clearSession())
+      router.push('/admin/login')
     }
   });
   // React.useEffect(() => {
