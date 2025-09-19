@@ -18,7 +18,8 @@ export const userSlice = createSlice({
     initialState,
     reducers: {
       clearUser: (state) => {
-                  state = initialState
+                  state.loading = false
+                  state.item = {id: '', fullName: ''}
               },
     },
      extraReducers(builder) {

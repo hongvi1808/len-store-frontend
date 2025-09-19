@@ -118,8 +118,8 @@ export default function Appbar(props: AppbarProps) {
         },
         onSuccess: (data) => {
             if (data) {
-                dispatch(clearSession())
                 dispatch(clearUser())
+                dispatch(clearSession())
             }
         }
     });
