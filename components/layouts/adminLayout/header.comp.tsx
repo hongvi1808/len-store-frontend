@@ -68,9 +68,8 @@ export default function Header({
       showAlertError(error.message)
     },
     onSuccess: (data) => {
-      if (data)
+      dispatch(clearUser())
         dispatch(clearSession())
-        dispatch(clearUser())
       router.push('/admin/login')
     }
   });
