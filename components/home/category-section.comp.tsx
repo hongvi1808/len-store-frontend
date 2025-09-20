@@ -7,19 +7,22 @@ import { motion, useDragControls } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef } from "react";
-export function CategoryBubbleSection() {
+interface CategoryBubbleSectionProps {
+    categories: any
+}
+export function CategoryBubbleSection(props: CategoryBubbleSectionProps) {
     const router = useRouter();
     const ref = useRef<HTMLDivElement>(null);
     const dragControls = useDragControls();
-    const { data, isLoading } = useQuery({
-        queryKey: ['all-category-name'],
-        queryFn: () => categoryApis.getList({ page: 0, limit: 100 }),
-    })
+    // const { data, isLoading } = useQuery({
+    //     queryKey: ['all-category-name'],
+    //     queryFn: () => categoryApis.getList({ page: 0, limit: 100 }),
+    // })
     return (
         <Box overflow={'hidden'} height={'80vh'}>
             <Box ref={ref} position={'relative'} width={'100%'} height={400}  >
 
-                {data?.items?.map((item: any) =>
+                {props.categories?.map((item: any) =>
 
                     <Box onClick={() => router.push(`/${item.tag}/${item.slug}`)}
                         position={'absolute'}

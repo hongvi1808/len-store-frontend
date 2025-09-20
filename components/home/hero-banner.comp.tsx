@@ -51,10 +51,10 @@ export default function HeroBanner() {
                     >
                         <Box className="absolute inset-0 bg-black/40"></Box>
                         <Stack width={'100%'} className="z-10" alignItems={'center'} justifyContent={'center'} sx={{ color: 'white' }}>
-                            <Stack direction={'row'} spacing={1.5} alignItems={'center'}>
+                            <Stack direction={'row'} spacing={{ xs: 1, sm: 1.2, md:1.4, lg: 1.5 }} alignItems={'center'}>
                                 {('Chào mừng bạn đến với').split("").map((char, i) => (
-                                    <Typography key={i}
-                                        fontSize={{ sx: '1.75rem', sm: '2.9rem', md: '3.9rem', lg: '4.5rem' }}
+                                    <Typography key={i} variant="h1" fontWeight={400}
+                                        fontSize={{ xs: '1.75rem', sm: '2.9rem', md: '3.9rem', lg: '4.5rem' }}
                                         component={motion.h1}
                                         initial={{ opacity: 0, }}
                                         transition={{
@@ -69,8 +69,8 @@ export default function HeroBanner() {
                                         { char}
                                     </Typography>))}
                                 {(' LenStore').split('').map((char, i) => (
-                                    <Typography key={i}
-                                         fontSize={{ sx: '1.75rem', sm: '2.9rem', md: '3.9rem', lg: '4.5rem' }}
+                                    <Typography key={i} variant="h1" fontWeight={400}
+                                         fontSize={{ xs: '1.75rem', sm: '2.9rem', md: '3.9rem', lg: '4.5rem' }}
                                         component={motion.h1}
                                         initial={{ opacity: 0, }}
                                         transition={{
@@ -94,8 +94,8 @@ export default function HeroBanner() {
                                     </Typography>))}
                             </Stack>
 
-                            <Typography  textAlign={'center'} letterSpacing={0.5} mt={6} width={'50%'}
-                                component={motion.h1} variant="subtitle1"
+                            <Typography mx={1} textAlign={'center'} letterSpacing={0.5} mt={6}  width={{sm: '100%', md: '50%'}}
+                                component={motion.h1} variant={'subtitle1'}
                                 initial={{ opacity: 0, }} color={gray[100]}
                                 transition={{ duration: 2, }}
                                 animate={{ opacity: 0.8, y: [300, -20, 0] }}>
