@@ -5,17 +5,19 @@ import AutoScroll from 'embla-carousel-auto-scroll'
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { productApis } from "@/base/apis/product.api";
-
-export function NewItemsSection() {
+interface NewItemsSectionProps {
+    items: any
+}
+export function NewItemsSection(props: NewItemsSectionProps) {
     const [emblaRef] = useEmblaCarousel({
         loop: true,
     }, [
         AutoScroll({ playOnInit: true, speed: 2, stopOnInteraction: false }),
     ])
-    const { data, isLoading } = useQuery({
-        queryKey: ['products-new-handmade'],
-        queryFn: () => productApis.getListByTag('handmade', { limit: 10, page: 0 }),
-    })
+    // const { data, isLoading } = useQuery({
+    //     queryKey: ['products-new-handmade'],
+    //     queryFn: () => productApis.getListByTag('handmade', { limit: 10, page: 0 }),
+    // })
     return (<Stack spacing={{ sm: 4, md: 6, lg: 8 }} width={'100%'} alignItems={'center'} mb={8} >
         <Stack width={'100%'} alignItems={'center'} spacing={2} >
             <Typography variant="caption" color="textSecondary" >
@@ -27,7 +29,7 @@ export function NewItemsSection() {
         </Stack >
         <Box ref={emblaRef} sx={{ overflow: 'hidden', width: '100%', }} >
             <Stack width={'100%'} height={'100%'} direction={'row'}>
-                {data?.items?.map((item: any) => (
+                {props.items?.map((item: any) => (
                     <Box className={'flex-[0_0_30%] ml-2'} component={Link} href={`/${item.slug}`}
                         key={item.id}
                     >

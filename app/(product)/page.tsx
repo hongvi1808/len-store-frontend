@@ -8,8 +8,27 @@ import { HotItemSection } from "@/components/home/hot-item.comp";
 import { Stack } from "@mui/material";
 import { PartnerContactSection } from "@/components/home/partner-contact-section.comp";
 import Footer from "@/components/layouts/customerLayout/footer.comp";
-
-export default function Home() {
+import { categoryApis } from "@/base/apis/category.api";
+import { productApis } from "@/base/apis/product.api";
+async function fetchCategoryList() {
+    try {
+            const data = await categoryApis.getList({ page: 0, limit: 100 })
+            return data?.items
+    } catch (error) {
+        throw error
+    }
+}
+async function fetchNewProductList() {
+    try {
+            const data = await productApis.getListByTag('handmade', { limit: 10, page: 0 })
+            return data?.items
+    } catch (error) {
+        throw error
+    }
+}
+export default async function Home() {
+  const categories = await fetchCategoryList()
+  const newProducts = await fetchNewProductList()
   return <Stack alignItems={'center'}
     sx={{
       backgroundImage: `linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url(${'/images/wool.jpg'})`,
@@ -31,7 +50,7 @@ export default function Home() {
 
 
     <FadeInSection>
-      <CategoryBubbleSection />
+      <CategoryBubbleSection categories={categories} />
     </FadeInSection>
 
     <Stack
@@ -46,7 +65,7 @@ export default function Home() {
       </FadeInSection>
       
       <FadeInSection>
-        <NewItemsSection />
+        <NewItemsSection items={newProducts} />
       </FadeInSection>
       <FadeInSection>
         <DividerLineSection />
