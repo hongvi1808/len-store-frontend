@@ -29,6 +29,6 @@ export const productApis = {
         return apiBase.put(`${urlDefault}/${data?.id}`, data);
     },
     remove: (id: string) => {
-        return apiBase.get(`${urlDefault}/${id}`);
+        return apiBase.delete(`${urlDefault}/${id}`);
     },
 }
