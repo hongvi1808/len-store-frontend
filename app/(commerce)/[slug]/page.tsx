@@ -14,8 +14,8 @@ interface Props {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const param = await params;
-  const product = await fetchDetailProduct(param?.slug);
+  // const param = await params;
+  const product = await fetchDetailProduct(params?.slug);
 
   return {
     title: `${product.name} | LenStore`,
