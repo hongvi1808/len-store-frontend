@@ -7,6 +7,12 @@ import { CardImageProduct } from "./card-image.comp";
 import { ProductAction } from "./product-action.comp";
 
 type Props = { params: { slug: string } };
+// type Props = {
+//   params: Promise<{
+//     slug: string
+//   }>
+// }
+
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const param = await params;
